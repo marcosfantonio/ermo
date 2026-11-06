@@ -57,7 +57,7 @@ theme_override_colors/font_shadow_color = Color(0.1, 0.13, 0.1, 0.8)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 12
-text = "SÍTIOS INFINITOS\nWASD  caminhar     Shift  correr     Esc  pausa     F2  movimento da câmera"
+text = "SÍTIOS INFINITOS\nWASD  caminhar     Shift  correr     Esc  pausa     F2  movimento da câmera\n1  fazendas infinitas     2  balneário"
 [node name="Pause" type="PanelContainer" parent="Interface"]
 visible = false
 offset_left = 170.0

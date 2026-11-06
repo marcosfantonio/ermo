@@ -1,3 +1,4 @@
+@tool
 class_name WorldSettings
 extends Resource
 ## All distances are metres. The horizon fades before the streaming boundary.

@@ -1,6 +1,52 @@
 # ERMO — Sítios Infinitos
 
-Primeira fase jogável em **Godot 4**, com paisagem rural liminal diurna, exploração em primeira pessoa e mundo procedural determinístico. Testado na Godot **4.7.2**, renderizador Compatibility/OpenGL.
+**Fonte de verdade: [CONCEPT.md](CONCEPT.md).** A entrada atual é `scenes/exploration.tscn`: uma fatia artesanal e finita dos Sítios Infinitos, em Godot **4.7.2**, Compatibility/OpenGL. Os universos futuros não foram construídos nesta reformulação.
+
+## Reformulação atual
+
+- **F5**: trecho planejado, com três casas, alpendres acessíveis, morros, estradas reconectadas e quatro entradas alternativas.
+- **E junto à porteira de entrada**: atravessar e visitar novamente os Sítios; a visita avança, muda a entrada e pode alterar uma porteira secundária, uma cerca lateral e a cadeira da casa repetida. Os marcos permanecem fixos.
+- **F2**: movimento da câmera; **F3**: óptica analógica; **Esc**: pausa/volume; WASD, Shift e Espaço mantidos.
+- Dreamcore tropical: céu azul, verdes vivos, luz quente, sombra fria, materiais PS1 originais, resolução 640 × 360 e óptica ajustável por universo.
+- Limites reais: muros rurais visíveis com colisão, posicionados junto a cristas irregulares e vegetação. Névoa complementa, não substitui a geometria.
+- `scenes/universes/sitios.tscn`: abra diretamente para editar relevo, rotas, marcos, entradas e variantes. Selecione **World → Atualizar prévia 3D**. Para reproduzir no jogo, ative **Reproduce Visit**, informe **Session Seed / Visit Index** e execute `scenes/exploration.tscn`.
+- `resources/sitios_universe.tres`: ambiente, FOV, áudio e intensidades ópticas. Cada universo pode apontar para uma cena e um perfil próprios.
+- Visitas/flags persistem em `user://ermo_visits_v1.json`; não se salva a posição exata do jogador. Seed de sessão + índice de visita reproduzem a configuração.
+
+Auditoria, arquitetura, validação e limitações: **[docs/reformulacao.md](docs/reformulacao.md)**. Capturas reais: `captures/reform_0.png` a `reform_3.png` (geráveis pelo teste abaixo).
+
+```sh
+godot --headless --editor --path . --import
+godot --headless --path . --script tests/exploration_test.gd
+godot --headless --editor --path . --script tests/authored_preview_test.gd
+godot --path . --script tests/exploration_capture.gd
+```
+
+Os testes de editor devem ser executados **um por vez**, sem outra instância modificando/importando o mesmo projeto.
+
+## Protótipos legados preservados
+
+O restante desta página documenta os protótipos anteriores. `scenes/main.tscn` continua sendo o rural por chunks; `scenes/balneario_infinito.tscn` continua sendo o Balneário procedural. Eles não definem a nova arquitetura nem a cena inicial. Os atalhos **1/2** desses protótipos são ferramentas de desenvolvimento, não passagens narrativas. Na nova fatia, **2** ainda abre o Balneário legado; volte à fatia com **F5** no editor.
+
+## Balneário Infinito
+
+Inspirado em `balneario1` e `balneario2`: piscinas poligonais com bordas de azulejo azul, água turquesa animada, piso de pedra irregular, cascatas largas, toboáguas amarelos em espiral, cogumelos vermelhos, guarda-sóis coloridos, mesas e cadeiras brancas, palmeiras e canteiros. O parque permanece vazio, com água localizada, vento e sons distantes, sem música constante.
+
+- Para executar este protótipo legado, abra `scenes/balneario_infinito.tscn` e use **F6**. O rural legado permanece em `scenes/main.tscn` (**F6**).
+- `resources/balneario.tres`: seed e streaming; chunks padrão de **64 m**, até **49 ativos**, com descarga, retorno determinístico e origem flutuante.
+- `scenes/balneario/`: módulos reutilizáveis de piscina, guarda-sol/mesa, palmeira, cogumelo e toboágua. Dimensões da piscina e tipo de toboágua são propriedades exportadas.
+- Piscinas de **0,48 m**, com piso sólido e rampas de acesso nas duas extremidades. Não há natação nem mecânica de deslizar; os toboáguas são cenográficos.
+- Pátios em **0, 1,6 e 3,2 m**, terraços de mesas elevados, rampas e escadas transitáveis. Muretas curvas com losangos junto à água, muros de arrimo, guarda-corpos brancos, postes e canteiros mais densos. As bordas dos chunks compartilham um anel de circulação na cota zero.
+- Muros altos de pedra irregular com juntas escuras, como na lateral esquerda de `balneario1`; losangos reservados às muretas baixas. Pisos superiores e inferiores com o mesmo revestimento. Escadas mais compactas e bases fechadas nos acessos, na cascata e no toboágua espiral.
+- Água parcialmente transparente com fundo azulejado visível, ondulações, brilho especular, Fresnel, cáusticas animadas e espuma na cascata; sem reflexos/refração de tela pesados.
+- Piscinas ovais grandes/pequenas, quadradas e retangulares; **três piscinas adicionais no nível inferior de cada chunk**, com bancos e áreas de estar em vez de apenas corredores vazios. Acessos em faixas reservadas, com folga entre rampas e validação das praças contra os chunks vizinhos.
+- Easter egg raro após **256 m**: rádio determinístico em uma das mesas já existentes, tocando `balneario.mp3` com banda estreita, leve distorção e volume espacial que cresce ao se aproximar. Digite **RADIO** para fazê-lo aparecer numa mesa próxima. O evento procedural pode ser reencontrado ao revisitar o mesmo chunk.
+- Anomalia discreta: todas as placas identificam **PISCINA 01**, mesmo atravessando setores diferentes.
+- As fotos são referências, não texturas extraídas: geometria, shaders e loop de água são originais.
+- Filtro **VHS** com granulação, linhas de varredura, leve desvio de cor e tracking; **F3** alterna os artefatos, mantendo a saturação aumentada. O filtro afeta o cenário, não os menus.
+- Câmera com balanço lateral, oscilação vertical e pequenos movimentos de rotação sincronizados aos passos, mais fortes ao correr e amortecidos ao parar. **F2** desativa o movimento.
+
+Detalhes e limitações em `docs/balneario.md`.
 
 ## Iniciar
 
@@ -22,6 +68,10 @@ A preparação inicial carrega o entorno antes de liberar o jogador. Não são n
 | Pausar, ajustar volume e movimento da câmera | Esc |
 | Ligar/desligar bob, sway e impacto | F2 |
 | Tela cheia | F11 |
+| Ir para Fazendas / Sítios Infinitos | 1 |
+| Ir para Balneário Infinito | 2 |
+
+Os atalhos de fase também aceitam o teclado numérico e funcionam durante a pausa. A troca inicia no ponto de entrada da fase escolhida, sem guardar a posição anterior. Pressionar o número da fase atual não a reinicia.
 
 ## O que está implementado
 
@@ -54,7 +104,9 @@ Mudanças de seed alteram a disposição. Com a mesma seed, o mundo retorna igua
 ```sh
 godot --headless --editor --path . --import
 godot --headless --path . --script tests/world_test.gd
+godot --headless --path . --script tests/balneario_test.gd
 godot --path . --script tests/capture.gd
+godot --path . --script tests/balneario_capture.gd
 ```
 
 O teste verifica determinismo, bordas compartilhadas, colisão inicial, streaming, retorno, origem flutuante, caminhada e pausa. A captura precisa de uma sessão gráfica e salva imagens reais em `captures/`.

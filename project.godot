@@ -14,9 +14,13 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-config/name="ERMO — Sítios Infinitos"
-run/main_scene="res://scenes/main.tscn"
+config/name="ERMO"
+run/main_scene="res://scenes/exploration.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[autoload]
+
+UniverseManager="*res://scripts/universes/universe_manager.gd"
 
 [display]
 

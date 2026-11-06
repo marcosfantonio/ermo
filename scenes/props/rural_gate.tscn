@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3]
+[ext_resource type="Material" path="res://materials/wood.tres" id="1"]
+[sub_resource type="BoxMesh" id="Post"]
+material = ExtResource("1")
+size = Vector3(0.25, 2.4, 0.25)
+[sub_resource type="BoxMesh" id="Rail"]
+material = ExtResource("1")
+size = Vector3(3.8, 0.14, 0.12)
+[sub_resource type="BoxShape3D" id="GateShape"]
+size = Vector3(4.0, 1.65, 0.25)
+[node name="RuralGate" type="StaticBody3D"]
+[node name="PostLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-2, 1.2, 0)
+mesh = SubResource("Post")
+[node name="PostRight" type="MeshInstance3D" parent="."]
+position = Vector3(2, 1.2, 0)
+mesh = SubResource("Post")
+[node name="RailLow" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.45, 0)
+mesh = SubResource("Rail")
+[node name="RailHigh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.55, 0)
+mesh = SubResource("Rail")
+[node name="Brace" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1, 0)
+rotation_degrees = Vector3(0, 0, 16)
+mesh = SubResource("Rail")
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("GateShape")

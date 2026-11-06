@@ -1,3 +1,4 @@
+@tool
 class_name Landscape
 extends RefCounted
 ## One shared world-space field for mesh, props, paths and collision.

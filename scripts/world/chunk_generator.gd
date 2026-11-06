@@ -1,3 +1,4 @@
+@tool
 class_name ChunkGenerator
 extends RefCounted
 
@@ -33,7 +34,7 @@ func build(cell: Vector2i, origin_cell: Vector2i = Vector2i.ZERO) -> Node3D:
 			house.rotation.y = site.rotation
 			house.position.y += 0.05
 			if site.echo:
-				var echo := ECHO.instantiate()
+				var echo := ECHO.instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE if Engine.is_editor_hint() else PackedScene.GEN_EDIT_STATE_DISABLED)
 				house.add_child(echo)
 			else:
 				house.get_node("Number").text = str(15 + int(site.variant) * 2)
@@ -63,7 +64,7 @@ func _owns(p: Vector2, origin: Vector2, size: int) -> bool:
 	return p.x >= origin.x and p.x < origin.x + size and p.y >= origin.y and p.y < origin.y + size
 
 func _place(scene: PackedScene, root: Node3D, p: Vector2, origin: Vector2) -> Node3D:
-	var prop := scene.instantiate() as Node3D
+	var prop := scene.instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE if Engine.is_editor_hint() else PackedScene.GEN_EDIT_STATE_DISABLED) as Node3D
 	prop.set_meta("world_position", p)
 	prop.position = Vector3(p.x - origin.x, field.surface_height(p.x, p.y), p.y - origin.y)
 	root.add_child(prop)

@@ -1,3 +1,4 @@
+@tool
 extends MeshInstance3D
 ## A cheap, collision-free continuation beneath the streaming terrain.
 ## Only the distance is coarse; it uses the same continuous height field.
@@ -7,7 +8,7 @@ var last_cell := Vector2i(999999, 999999)
 var last_origin := Vector2i(999999, 999999)
 
 func _process(_delta: float) -> void:
-	if world.field == null:
+	if world == null or player == null or world.field == null:
 		return
 	var absolute: Vector3 = world.absolute_position(player.position)
 	var cell := Vector2i(floori(absolute.x / 128), floori(absolute.z / 128))

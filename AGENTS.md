@@ -11,6 +11,8 @@ O projeto prioriza:
 - observação de anomalias
 - progressão ambiental e narrativa
 
+`CONCEPT.md` é a fonte de verdade criativa. Não inventar universos ou fixar as decisões narrativas ainda abertas nesse documento. A direção técnica atual prioriza universos independentes e espaços artesanais finitos; os geradores infinitos existentes são protótipos legados, não a arquitetura-alvo.
+
 O objetivo **não** é criar um “clone genérico de Backrooms”, e sim um jogo com identidade própria, usando arquitetura, paisagem, clima e memória coletiva brasileira como diferencial central.
 
 ---
@@ -38,7 +40,7 @@ Construir uma vertical slice curta, jogável, que demonstre:
 
 - movimentação em primeira pessoa
 - estética retrô de PS1
-- geração procedural de espaço “infinito”
+- espaço planejado que sugere infinitude, com percursos reconectados
 - ambientação rural brasileira
 - sensação liminal
 - pelo menos uma anomalia ambiental
@@ -84,6 +86,8 @@ Usar:
 - baixa resolução interna opcional
 - pixelização / dithering quando adequado
 
+A direção atual é **dreamcore tropical**: céu azul intenso, vegetação viva, contraste quente/frio e saturação hierarquizada. Óptica analógica deve complementar geometria e materiais, não substituir a direção de arte por um filtro VHS.
+
 Evitar exageros que prejudiquem a legibilidade.
 
 ---
@@ -104,6 +108,14 @@ Sempre que possível:
 
 O projeto deve aproveitar o editor da Godot, e não funcionar como um “motor custom feito só em GDScript”.
 
+### Visibilidade 3D no editor — obrigatória em toda alteração
+- Em toda alteração, verificar que os elementos 3D afetados continuam visíveis e inspecionáveis no editor da Godot, sem precisar executar o jogo.
+- Preferir cenas `.tscn` reutilizáveis, com meshes, materiais, colisões e hierarquias configuráveis pelo Inspector. Não entregar elementos visuais que existam apenas em `_ready()` durante o jogo.
+- Quando a geometria precisar ser procedural, fornecer prévia com `@tool`, parâmetros exportados e atualização explícita no Inspector. Manter os nós gerados inspecionáveis na árvore da cena e usar as mesmas regras/seeds da geração em runtime.
+- A prévia deve ser limitada e segura: não capturar o mouse, mover o jogador, tocar áudio ou executar lógica de gameplay no editor. Não duplicar geometria nem colisões ao atualizar, salvar/reabrir ou iniciar o jogo.
+- Nas fases atuais, selecionar `World` e usar **Atualizar prévia 3D** após alterar a seed, o perfil de mundo ou as regras de geração. Os props procedurais possuem **Atualizar geometria** e atualizam seus parâmetros exportados no editor.
+- Ao concluir qualquer alteração, informar como visualizar o resultado no editor e validar a prévia e o funcionamento em runtime. Caso uma validação não possa ser executada, declarar essa limitação.
+
 ---
 
 ## Regras técnicas obrigatórias
@@ -116,20 +128,15 @@ Tudo deve ser pensado de forma modular e reutilizável:
 - sistema de chunks
 - anomalias desacopladas
 
-### 2. Procedural com consistência
-A fase deve usar **geração procedural baseada em chunks determinísticos**.
+### 2. Construção artesanal e variação com consistência
+Cada universo tem geometria, marcos, percursos, entradas e limites físicos planejados. Proceduralidade é complementar: vegetação e detalhes secundários, nunca preenchimento integral do mapa.
 
-Isso significa:
-- o mundo é dividido em chunks
-- chunks são gerados ao redor do jogador
-- chunks fora do raio são descarregados
-- se o jogador voltar, o chunk reaparece igual
-- a seed do chunk deve depender das coordenadas dele
-
-Objetivo:
-- manter a sensação de infinito
-- preservar coerência espacial
-- permitir repetição com pequenas variações controladas
+- Selecionar entradas entre `Marker3D` válidos, não coordenadas aleatórias.
+- Variar apenas elementos explicitamente autorizados entre visitas.
+- Preservar marcos reconhecíveis e pistas suficientes para exploração compreensível.
+- Reproduzir configurações com perfil, seed de sessão e índice de visita.
+- Ocultar limites por arquitetura, geografia e atmosfera coerentes com o universo; não depender de paredes invisíveis.
+- Preservar os geradores legados enquanto houver dependências e testes; não os usar como requisito para novos cenários.
 
 ### 3. Performance antes de excesso de detalhe
 Priorizar:
@@ -187,8 +194,8 @@ O cenário deve incluir:
 - postes / pequenos marcos de orientação
 - sensação de vastidão
 
-### Procedural
-Cada chunk deve poder conter combinações de:
+### Composição espacial
+O trecho artesanal deve combinar:
 - terreno
 - estrada
 - casa
@@ -197,7 +204,7 @@ Cada chunk deve poder conter combinações de:
 - poste
 - pequeno detalhe ambiental
 
-As regras devem priorizar plausibilidade visual, não aleatoriedade total.
+As regras devem priorizar plausibilidade visual, composição intencional e incerteza espacial controlada, não aleatoriedade total. `scenes/exploration.tscn` é a entrada atual; `scenes/universes/sitios.tscn` contém a construção editável.
 
 ### Anomalias
 O protótipo deve conter pelo menos uma anomalia, por exemplo:
@@ -218,7 +225,7 @@ Anomalias devem ser discretas e perturbadoras, não chamativas demais.
 Inspirado em survival horror e jogos 3D do fim dos anos 90:
 - geometria low poly
 - textura simples
-- paleta levemente dessaturada
+- paleta tropical com cores vivas e saturação hierarquizada
 - céu expressivo
 - pôr do sol ou fim de tarde como opção estética forte
 - neblina para reduzir horizonte e reforçar o mistério
@@ -305,7 +312,7 @@ Entregar um protótipo jogável da fase **Sítios Infinitos**, contendo:
 
 - exploração em primeira pessoa
 - visual retrô estilo PS1
-- cenário rural brasileiro procedural e “infinito”
+- cenário rural brasileiro artesanal, finito, com sensação de infinitude
 - câmera com movimento físico sutil e realista
 - pelo menos uma anomalia ambiental
 - base técnica sólida para futuras fases
