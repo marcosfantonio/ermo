@@ -1,0 +1,152 @@
+[gd_scene load_steps=27 format=3]
+[ext_resource type="Material" path="res://materials/plaster.tres" id="1"]
+[ext_resource type="Material" path="res://materials/roof.tres" id="2"]
+[ext_resource type="Material" path="res://materials/blue.tres" id="3"]
+[ext_resource type="Material" path="res://materials/cement.tres" id="4"]
+[ext_resource type="ArrayMesh" path="res://assets/models/roof.obj" id="5"]
+[ext_resource type="ArrayMesh" path="res://assets/models/gables.obj" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/props/chair.tscn" id="7"]
+[sub_resource type="BoxMesh" id="Side"]
+material = ExtResource("1")
+size = Vector3(0.22, 3, 5.2)
+[sub_resource type="BoxShape3D" id="SideShape"]
+size = Vector3(0.22, 3, 5.2)
+[sub_resource type="BoxMesh" id="Back"]
+material = ExtResource("1")
+size = Vector3(7.4, 3, 0.22)
+[sub_resource type="BoxShape3D" id="BackShape"]
+size = Vector3(7.4, 3, 0.22)
+[sub_resource type="BoxMesh" id="FrontLeft"]
+material = ExtResource("1")
+size = Vector3(1.8, 3, 0.22)
+[sub_resource type="BoxShape3D" id="LeftShape"]
+size = Vector3(1.8, 3, 0.22)
+[sub_resource type="BoxMesh" id="FrontRight"]
+material = ExtResource("1")
+size = Vector3(4.5, 3, 0.22)
+[sub_resource type="BoxShape3D" id="RightShape"]
+size = Vector3(4.5, 3, 0.22)
+[sub_resource type="BoxMesh" id="Lintel"]
+material = ExtResource("1")
+size = Vector3(1.1, 0.8, 0.22)
+[sub_resource type="BoxMesh" id="Floor"]
+material = ExtResource("4")
+size = Vector3(8, 0.2, 7.5)
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(8, 0.2, 7.5)
+[sub_resource type="BoxMesh" id="Column"]
+material = ExtResource("1")
+size = Vector3(0.18, 2.75, 0.18)
+[sub_resource type="BoxShape3D" id="ColumnShape"]
+size = Vector3(0.18, 2.75, 0.18)
+[sub_resource type="BoxMesh" id="Window"]
+material = ExtResource("3")
+size = Vector3(0.95, 1.05, 0.09)
+[sub_resource type="BoxMesh" id="Door"]
+material = ExtResource("3")
+size = Vector3(0.08, 2.15, 1.0)
+[sub_resource type="BoxMesh" id="LowerStep"]
+material = ExtResource("4")
+size = Vector3(2, 0.06, 0.4)
+[sub_resource type="BoxShape3D" id="LowerStepShape"]
+size = Vector3(2, 0.06, 0.4)
+[sub_resource type="BoxMesh" id="UpperStep"]
+material = ExtResource("4")
+size = Vector3(2, 0.12, 0.4)
+[sub_resource type="BoxShape3D" id="UpperStepShape"]
+size = Vector3(2, 0.12, 0.4)
+
+[node name="CasaAlpendre" type="Node3D"]
+[node name="Structure" type="StaticBody3D" parent="."]
+[node name="LeftWall" type="MeshInstance3D" parent="Structure"]
+position = Vector3(-3.7, 1.5, -0.5)
+mesh = SubResource("Side")
+[node name="LeftCollision" type="CollisionShape3D" parent="Structure"]
+position = Vector3(-3.7, 1.5, -0.5)
+shape = SubResource("SideShape")
+[node name="RightWall" type="MeshInstance3D" parent="Structure"]
+position = Vector3(3.7, 1.5, -0.5)
+mesh = SubResource("Side")
+[node name="RightCollision" type="CollisionShape3D" parent="Structure"]
+position = Vector3(3.7, 1.5, -0.5)
+shape = SubResource("SideShape")
+[node name="BackWall" type="MeshInstance3D" parent="Structure"]
+position = Vector3(0, 1.5, -3)
+mesh = SubResource("Back")
+[node name="BackCollision" type="CollisionShape3D" parent="Structure"]
+position = Vector3(0, 1.5, -3)
+shape = SubResource("BackShape")
+[node name="FrontLeft" type="MeshInstance3D" parent="Structure"]
+position = Vector3(-2.8, 1.5, 2)
+mesh = SubResource("FrontLeft")
+[node name="FrontLeftCollision" type="CollisionShape3D" parent="Structure"]
+position = Vector3(-2.8, 1.5, 2)
+shape = SubResource("LeftShape")
+[node name="FrontRight" type="MeshInstance3D" parent="Structure"]
+position = Vector3(1.45, 1.5, 2)
+mesh = SubResource("FrontRight")
+[node name="FrontRightCollision" type="CollisionShape3D" parent="Structure"]
+position = Vector3(1.45, 1.5, 2)
+shape = SubResource("RightShape")
+[node name="Lintel" type="MeshInstance3D" parent="Structure"]
+position = Vector3(-1.35, 2.6, 2)
+mesh = SubResource("Lintel")
+[node name="PorchFloor" type="MeshInstance3D" parent="Structure"]
+position = Vector3(0, 0, 0.4)
+mesh = SubResource("Floor")
+[node name="FloorCollision" type="CollisionShape3D" parent="Structure"]
+position = Vector3(0, 0, 0.4)
+shape = SubResource("FloorShape")
+[node name="LowerStep" type="MeshInstance3D" parent="Structure"]
+position = Vector3(-1.35, -0.035, 4.65)
+mesh = SubResource("LowerStep")
+[node name="LowerStepCollision" type="CollisionShape3D" parent="Structure"]
+position = Vector3(-1.35, -0.035, 4.65)
+shape = SubResource("LowerStepShape")
+[node name="UpperStep" type="MeshInstance3D" parent="Structure"]
+position = Vector3(-1.35, -0.01, 4.3)
+mesh = SubResource("UpperStep")
+[node name="UpperStepCollision" type="CollisionShape3D" parent="Structure"]
+position = Vector3(-1.35, -0.01, 4.3)
+shape = SubResource("UpperStepShape")
+[node name="ColumnLeft" type="MeshInstance3D" parent="Structure"]
+position = Vector3(-3.6, 1.375, 4)
+mesh = SubResource("Column")
+[node name="ColumnLeftCollision" type="CollisionShape3D" parent="Structure"]
+position = Vector3(-3.6, 1.375, 4)
+shape = SubResource("ColumnShape")
+[node name="ColumnMiddle" type="MeshInstance3D" parent="Structure"]
+position = Vector3(0, 1.375, 4)
+mesh = SubResource("Column")
+[node name="ColumnMiddleCollision" type="CollisionShape3D" parent="Structure"]
+position = Vector3(0, 1.375, 4)
+shape = SubResource("ColumnShape")
+[node name="ColumnRight" type="MeshInstance3D" parent="Structure"]
+position = Vector3(3.6, 1.375, 4)
+mesh = SubResource("Column")
+[node name="ColumnRightCollision" type="CollisionShape3D" parent="Structure"]
+position = Vector3(3.6, 1.375, 4)
+shape = SubResource("ColumnShape")
+[node name="Roof" type="MeshInstance3D" parent="."]
+mesh = ExtResource("5")
+material_override = ExtResource("2")
+[node name="Gables" type="MeshInstance3D" parent="."]
+mesh = ExtResource("6")
+material_override = ExtResource("1")
+[node name="BlueShutter" type="MeshInstance3D" parent="."]
+position = Vector3(1.7, 1.75, 2.16)
+mesh = SubResource("Window")
+[node name="OpenDoor" type="MeshInstance3D" parent="."]
+position = Vector3(-1.86, 1.175, 1.5)
+mesh = SubResource("Door")
+[node name="Chair" parent="." instance=ExtResource("7")]
+position = Vector3(2.6, 0.11, 2.8)
+rotation = Vector3(0, -0.2, 0)
+[node name="Number" type="Label3D" parent="."]
+position = Vector3(-0.5, 2.35, 2.14)
+pixel_size = 0.004
+font_size = 32
+text = "13"
+modulate = Color(0.2, 0.23, 0.21, 1)
+outline_size = 0
+no_depth_test = false

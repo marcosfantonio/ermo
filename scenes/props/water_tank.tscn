@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3]
+[ext_resource type="Material" path="res://materials/cement.tres" id="1"]
+[sub_resource type="BoxMesh" id="Leg"]
+material = ExtResource("1")
+size = Vector3(0.17, 4.7, 0.17)
+[sub_resource type="StandardMaterial3D" id="TankMaterial"]
+albedo_color = Color(0.32, 0.42, 0.47, 1)
+roughness = 1.0
+[sub_resource type="CylinderMesh" id="Tank"]
+material = SubResource("TankMaterial")
+top_radius = 0.95
+bottom_radius = 0.8
+height = 1.3
+radial_segments = 8
+[node name="WaterTank" type="Node3D"]
+[node name="Leg1" type="MeshInstance3D" parent="."]
+position = Vector3(-0.65, 2.35, -0.65)
+mesh = SubResource("Leg")
+[node name="Leg2" type="MeshInstance3D" parent="."]
+position = Vector3(0.65, 2.35, -0.65)
+mesh = SubResource("Leg")
+[node name="Leg3" type="MeshInstance3D" parent="."]
+position = Vector3(-0.65, 2.35, 0.65)
+mesh = SubResource("Leg")
+[node name="Leg4" type="MeshInstance3D" parent="."]
+position = Vector3(0.65, 2.35, 0.65)
+mesh = SubResource("Leg")
+[node name="Tank" type="MeshInstance3D" parent="."]
+position = Vector3(0, 5.2, 0)
+mesh = SubResource("Tank")

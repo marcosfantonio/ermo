@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3]
+[ext_resource type="Material" path="res://materials/wood.tres" id="1"]
+[sub_resource type="CylinderMesh" id="Pole"]
+material = ExtResource("1")
+top_radius = 0.1
+bottom_radius = 0.17
+height = 6.5
+radial_segments = 5
+[sub_resource type="BoxMesh" id="Crossbar"]
+material = ExtResource("1")
+size = Vector3(1.4, 0.12, 0.12)
+[sub_resource type="StandardMaterial3D" id="Ceramic"]
+albedo_color = Color(0.48, 0.44, 0.31, 1)
+roughness = 1.0
+[node name="RuralPole" type="Node3D"]
+[node name="Pole" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.25, 0)
+mesh = SubResource("Pole")
+[node name="Crossbar" type="MeshInstance3D" parent="."]
+position = Vector3(0, 6.1, 0)
+mesh = SubResource("Crossbar")

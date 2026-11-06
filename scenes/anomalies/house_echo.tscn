@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/anomalies/house_echo.gd" id="1"]
+[ext_resource type="AudioStream" path="res://assets/audio/empty_house.wav" id="2"]
+[node name="HouseEcho" type="Node3D"]
+script = ExtResource("1")
+[node name="EmptyRoom" type="AudioStreamPlayer3D" parent="."]
+position = Vector3(0, 1.4, -1)
+stream = ExtResource("2")
+volume_db = -12.0
+unit_size = 3.0
+max_distance = 16.0

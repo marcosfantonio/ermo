@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3]
+[ext_resource type="Shader" path="res://shaders/retro.gdshader" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/plaster.png" id="2"]
+[resource]
+shader = ExtResource("1")
+shader_parameter/grain = ExtResource("2")
+shader_parameter/tint = Color(1, 0.98, 0.91, 1)
+shader_parameter/texture_scale = 2.0
+shader_parameter/wobble = 0.18
