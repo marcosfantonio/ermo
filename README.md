@@ -1,129 +1,77 @@
-# ERMO — Sítios Infinitos
+# ERMO
 
-**Fonte de verdade: [CONCEPT.md](CONCEPT.md).** A entrada atual é `scenes/exploration.tscn`: uma fatia artesanal e finita dos Sítios Infinitos, em Godot **4.7.2**, Compatibility/OpenGL. Os universos futuros não foram construídos nesta reformulação.
+Protótipo em Unity 6000.6 / URP. A base visual portada de `godot/ermo` foi adaptada para **found footage tropical**, com textura de câmera antiga moderada, cores saturadas, colinas orgânicas e chunks persistentes. Texturas e sons vêm do próprio projeto Godot; não há assets externos para baixar. Veja a comparação técnica em [docs/GODOT_VISUAL_PORT.md](docs/GODOT_VISUAL_PORT.md).
 
-## Reformulação atual
+## Jogar
 
-- **F5**: trecho planejado, com três casas, alpendres acessíveis, morros, estradas reconectadas e quatro entradas alternativas.
-- **E junto à porteira de entrada**: atravessar e visitar novamente os Sítios; a visita avança, muda a entrada e pode alterar uma porteira secundária, uma cerca lateral e a cadeira da casa repetida. Os marcos permanecem fixos.
-- **F2**: movimento da câmera; **F3**: óptica analógica; **Esc**: pausa/volume; WASD, Shift e Espaço mantidos.
-- Dreamcore tropical: céu azul, verdes vivos, luz quente, sombra fria, materiais PS1 originais, resolução 640 × 360 e óptica ajustável por universo.
-- Limites reais: muros rurais visíveis com colisão, posicionados junto a cristas irregulares e vegetação. Névoa complementa, não substitui a geometria.
-- `scenes/universes/sitios.tscn`: abra diretamente para editar relevo, rotas, marcos, entradas e variantes. Selecione **World → Atualizar prévia 3D**. Para reproduzir no jogo, ative **Reproduce Visit**, informe **Session Seed / Visit Index** e execute `scenes/exploration.tscn`.
-- `resources/sitios_universe.tres`: ambiente, FOV, áudio e intensidades ópticas. Cada universo pode apontar para uma cena e um perfil próprios.
-- Visitas/flags persistem em `user://ermo_visits_v1.json`; não se salva a posição exata do jogador. Seed de sessão + índice de visita reproduzem a configuração.
+1. Abra `Assets/Ermo/Scenes/Ermo.unity` (ou menu **Ermo → Open Meadow Scene**).
+2. Aperte **Play** e clique na Game View, se necessário.
+3. **WASD** anda, **Shift** corre, **mouse** olha, **Esc / F1** abre opções, **H** oculta a interface.
+4. **F3** alterna a óptica analógica; **F4** alterna Godot 640×360 / resolução nativa. No menu também é possível escolher a névoa Godot ou a antiga névoa só no horizonte.
 
-Auditoria, arquitetura, validação e limitações: **[docs/reformulacao.md](docs/reformulacao.md)**. Capturas reais: `captures/reform_0.png` a `reform_3.png` (geráveis pelo teste abaixo).
+No menu é possível trocar a seed ou desativar o balanço e a lente usando **Movimento reduzido**. O mundo continua carregado enquanto o menu está aberto, mas o jogador para. Ao voltar a uma seed, os chunks anteriores são recuperados; o jogador começa novamente na estrada (a posição do jogador ainda não é salva).
 
-```sh
-godot --headless --editor --path . --import
-godot --headless --path . --script tests/exploration_test.gd
-godot --headless --editor --path . --script tests/authored_preview_test.gd
-godot --path . --script tests/exploration_capture.gd
-```
+## Configuração
 
-Os testes de editor devem ser executados **um por vez**, sem outra instância modificando/importando o mesmo projeto.
+Selecione `Assets/Ermo/Settings/MeadowWorld.asset` ou **Ermo → Select World Settings**. Contém seed, tamanho/resolução dos chunks, alcance de carregamento, frequências dos objetos, relevo, resolução de renderização, lente e balanço. As alterações no menu são apenas da sessão e não modificam o asset.
 
-## Protótipos legados preservados
+- Perfil atual: até **540 linhas**, ampliação pixelada (`Pixelated Upscale`), foco levemente suave, saturação **1,22**, contraste 1,05, highlights suavizados, lente 0,042 e cromática 0,3 px. Grão **0,014** em espaço de exibição: intermediário entre o antigo excesso e o perfil quase limpo. Dithering leve 0,08, RGB bleed discreto, linhas de vídeo sutis, instabilidade/tracking subpixel, variação lenta de exposição e raras falhas de fita de baixa intensidade. `Analog Artifacts` regula esses detalhes; movimento reduzido desliga as distorções animadas, mas preserva a textura. Não há flashes fortes ou glitch de tela inteira.
+- **F4** permite experimentar o perfil 640×360 com nearest/escala inteira e voltar ao nativo; **F3** desativa apenas a óptica. O ramo óptico Godot original continua disponível ao desligar `Found Footage` (reponha seus parâmetros se quiser a intensidade original). O VHS legado continua opcional e desligado por padrão.
+- Câmera de saída dedicada ao Display 1, além da câmera do jogador que renderiza a paisagem em textura.
+- Alcance padrão de 768 m (8 chunks de 96 m por direção). Os 289 chunks da área inicial são carregados progressivamente.
+- Névoa Godot: exponencial por distância, densidade 0,0035, cor azul e perspectiva aérea 0,3, sem o antigo ruído animado sobre todo o relevo. **Alternativa preservada:** `Fog Style = Horizon Only` começa a 85% do alcance (653 m) e fecha perto de 99,5% (764 m).
+- Céu portado de `sky.gdshader`, com o mesmo gradiente azul, projeção de nuvens anisotrópica e limiares de ruído; não utiliza mais grupos de esferas nem nuvens fixas na vista inicial.
+- Colinas gaussianas derivadas dos sete contornos Godot, agora com **altura ×0,65 e largura ×1,65**, e normais suavizadas sobre a mesma malha low-poly. Pátios nivelados em torno das casas, colisão da própria malha e estradas apoiadas na interpolação dos triângulos. A soma periódica considera vizinhos adicionais para evitar emendas nas colinas mais largas. `Godot Legacy Waves` disponibiliza a fórmula senoidal antiga; `Perlin` mantém uma alternativa.
+- `Organic Hills` acrescenta deformação espacial contínua por Perlin, ondulações longas assimétricas e pequenas ondulações secundárias, todas dependentes da seed e **estáticas**. Isso quebra a repetição de 300×276 m sem animar o chão nem reintroduzir picos agudos. `Terrain Warp` e `Terrain Wave Height` controlam a intensidade. Malha, pátios, estrada, props e colisão compartilham o mesmo campo global.
+- Grama, reboco, madeira e telhado usam as texturas originais, sombreamento Lambert, luz quente e ambiente azulado. No perfil found footage, a grama é filtrada de forma mais suave, sua textura tem menos contraste e o snapping dos props foi reduzido de 0,18 para 0,035; colisões não oscilam.
+- Balanço orgânico mais lento: 0,68 ciclos laterais/s caminhando e 1 ciclo/s correndo, variação suave de Perlin e amortecimento de posição/rotação. `Walk Sway Frequency`, `Run Sway Frequency` e `Sway Smoothing` permitem ajustar a sensação sem afetar a resposta do mouse.
+- Casas low-poly com colisão; a variante de porta aberta tem entrada física. Caixas-d'água, postes com fios e turbinas brancas raras com pás lentas.
+- Terreno contínuo amostrado em coordenadas globais; chunks próximos carregam primeiro e são descarregados com uma margem de segurança.
+- Estradas sinuosas seguem o eixo Z em ambas as direções, em faixas espaçadas a cada 256 m em X. Assim, também há estradas e postes ao explorar lateralmente; cruzamentos, ramificações e outros biomas ficam para uma próxima etapa.
 
-O restante desta página documenta os protótipos anteriores. `scenes/main.tscn` continua sendo o rural por chunks; `scenes/balneario_infinito.tscn` continua sendo o Balneário procedural. Eles não definem a nova arquitetura nem a cena inicial. Os atalhos **1/2** desses protótipos são ferramentas de desenvolvimento, não passagens narrativas. Na nova fatia, **2** ainda abre o Balneário legado; volte à fatia com **F5** no editor.
+## Persistência e futuras personalizações
 
-## Balneário Infinito
+Dados atuais em `Application.persistentDataPath/Ermo/worlds/<SHA256-da-seed>/layout-6-organic-sites/`. Saves anteriores permanecem intactos, mas não são misturados ao novo relevo/distribuição. Não é necessário trocar a seed para ver as mudanças. O espaçamento mínimo dos locais continua em 150 m.
 
-Inspirado em `balneario1` e `balneario2`: piscinas poligonais com bordas de azulejo azul, água turquesa animada, piso de pedra irregular, cascatas largas, toboáguas amarelos em espiral, cogumelos vermelhos, guarda-sóis coloridos, mesas e cadeiras brancas, palmeiras e canteiros. O parque permanece vazio, com água localizada, vento e sons distantes, sem música constante.
+- `world.json`: versão, seed e parâmetros do terreno e da distribuição de locais. Esses parâmetros são restaurados ao reabrir a seed, evitando alterar o relevo e as distâncias mínimas nas bordas de chunks já visitados.
+- `<chunkX>_<chunkZ>.json`: posições, rotações, escalas, tipos e IDs dos objetos já gerados. A lista é lida do disco, **não sorteada novamente**. A malha é reconstruída a partir do relevo determinístico; não são armazenados GameObjects ou malhas inteiras.
+- Escrita temporária e substituição do arquivo; erros são exibidos no menu e no Console. JSONs inválidos são preservados com sufixo `.corrupt-…` para diagnóstico.
 
-- Para executar este protótipo legado, abra `scenes/balneario_infinito.tscn` e use **F6**. O rural legado permanece em `scenes/main.tscn` (**F6**).
-- `resources/balneario.tres`: seed e streaming; chunks padrão de **64 m**, até **49 ativos**, com descarga, retorno determinístico e origem flutuante.
-- `scenes/balneario/`: módulos reutilizáveis de piscina, guarda-sol/mesa, palmeira, cogumelo e toboágua. Dimensões da piscina e tipo de toboágua são propriedades exportadas.
-- Piscinas de **0,48 m**, com piso sólido e rampas de acesso nas duas extremidades. Não há natação nem mecânica de deslizar; os toboáguas são cenográficos.
-- Pátios em **0, 1,6 e 3,2 m**, terraços de mesas elevados, rampas e escadas transitáveis. Muretas curvas com losangos junto à água, muros de arrimo, guarda-corpos brancos, postes e canteiros mais densos. As bordas dos chunks compartilham um anel de circulação na cota zero.
-- Muros altos de pedra irregular com juntas escuras, como na lateral esquerda de `balneario1`; losangos reservados às muretas baixas. Pisos superiores e inferiores com o mesmo revestimento. Escadas mais compactas e bases fechadas nos acessos, na cascata e no toboágua espiral.
-- Água parcialmente transparente com fundo azulejado visível, ondulações, brilho especular, Fresnel, cáusticas animadas e espuma na cascata; sem reflexos/refração de tela pesados.
-- Piscinas ovais grandes/pequenas, quadradas e retangulares; **três piscinas adicionais no nível inferior de cada chunk**, com bancos e áreas de estar em vez de apenas corredores vazios. Acessos em faixas reservadas, com folga entre rampas e validação das praças contra os chunks vizinhos.
-- Easter egg raro após **256 m**: rádio determinístico em uma das mesas já existentes, tocando `balneario.mp3` com banda estreita, leve distorção e volume espacial que cresce ao se aproximar. Digite **RADIO** para fazê-lo aparecer numa mesa próxima. O evento procedural pode ser reencontrado ao revisitar o mesmo chunk.
-- Anomalia discreta: todas as placas identificam **PISCINA 01**, mesmo atravessando setores diferentes.
-- As fotos são referências, não texturas extraídas: geometria, shaders e loop de água são originais.
-- Filtro **VHS** com granulação, linhas de varredura, leve desvio de cor e tracking; **F3** alterna os artefatos, mantendo a saturação aumentada. O filtro afeta o cenário, não os menus.
-- Câmera com balanço lateral, oscilação vertical e pequenos movimentos de rotação sincronizados aos passos, mais fortes ao correr e amortecidos ao parar. **F2** desativa o movimento.
+**Landmarks** no asset permite duas modalidades:
 
-Detalhes e limitações em `docs/balneario.md`.
+1. `Exact Chunk`: coordenada específica e posição local. Ex.: chunk `(2, -1)`, posição `(48, 48)`, tipo `Open House`.
+2. Probabilística: um candidato por célula de `Spacing Meters`, com `Chance` e distância mínima da origem (`Minimum Distance`). `550` e `0.22` significam 22% por célula de 550 × 550 m, não uma garantia de uma casa a cada 550 m percorridos. A seleção não depende da ordem de exploração.
 
-## Iniciar
+### Locais e combinações
 
-Abra `project.godot` na Godot, aguarde a importação e pressione **F5**. Ou:
+- `Location Spacing = 180`: tamanho das células de distribuição, em metros.
+- `Minimum Location Distance = 150`: separação mínima entre os **centros dos locais**, não entre objetos do mesmo local. A seleção consulta candidatos vizinhos em coordenadas globais, independentemente de quais chunks estão carregados. Não significa que cada casa fique exatamente a 150 m da próxima; células vazias e locais especiais produzem intervalos maiores.
+- `Location Chance = 1`: todas as células são consideradas, em vez de deixar 28% vazias por sorteio. Candidatos perto da estrada ganham até 12 novas tentativas dentro do limite de jitter, em vez de descartar o local inteiro. A margem viária passa a 14 m para o centro e os anexos ficam para o lado afastado da estrada. Landmarks conflitantes ainda têm prioridade, e a distância mínima continua global. Não se coloca uma casa em todo chunk de 96 m: isso contrariaria os 150 m entre locais e eliminaria a sensação de espaço aberto.
+- `House Chance`: chance de um local comum ter uma casa. `Water Tower Chance` e `Turbine Chance`: chances independentes de anexos ao local com casa; também podem existir torres e turbinas isoladas.
+- Uma casa, casa + torre, casa + turbina ou casa + torre + turbina contam como **um único local**. Anexos ficam a aproximadamente 20–32 m do centro, compartilham `groupId`/`groupAnchor` e são persistidos com o chunk do centro, mesmo que atravessem sua borda.
+- Landmarks também respeitam a distância mínima. Locais exatos têm prioridade sobre probabilísticos e comuns; conflitos entre candidatos da mesma categoria usam uma prioridade estável. Candidatos conflitantes podem ser descartados, então a distância é um mínimo, não uma promessa de ocupação de todas as células.
+- `Include Water Tower` e `Include Turbine` permitem compor landmarks com casa e anexos. Postes não contam como locais e continuam ao longo das estradas.
 
-```sh
-godot --path . --editor
-godot --path .
-```
+Mantenha o `Id` de cada regra único e estável. A configuração de distribuição, inclusive landmarks, é registrada na criação do mundo para preservar o espaçamento entre chunks antigos e futuros. Para testar novas configurações, use outra seed; mudanças autorais em mundos existentes precisarão de uma migração explícita no futuro. `PropRecord.interacted` é um ponto de extensão: um sistema futuro deverá modificar o registro e chamar `WorldStore.Save` ao persistir uma interação. Portas interativas, inventário e eventos ainda não estão implementados.
 
-A preparação inicial carrega o entorno antes de liberar o jogador. Não são necessárias bibliotecas externas nem downloads de assets.
+O asset inclui uma casa a aproximadamente 180 m do início e, mais distante, uma casa com torre e turbina. Elas exemplificam locais autorais e combinações dentro do mundo procedural.
 
-## Controles
+## Brisa e passos
 
-| Ação | Controle |
-|---|---|
-| Caminhar / olhar | WASD ou setas / mouse |
-| Correr / pequeno salto | Shift / Espaço |
-| Pausar, ajustar volume e movimento da câmera | Esc |
-| Ligar/desligar bob, sway e impacto | F2 |
-| Tela cheia | F11 |
-| Ir para Fazendas / Sítios Infinitos | 1 |
-| Ir para Balneário Infinito | 2 |
+`RuralAudio` toca uma brisa leve em loop com pequenas variações de intensidade, e passos por **deslocamento real** do jogador. Andar/correr muda a cadência e a força; variações discretas de pitch/volume evitam repetição mecânica. O piso é identificado por colisão e posição na estrada: grama, terra ou cimento. Parado, contra uma parede, no ar, pausado ou após teleporte não há passos.
 
-Os atalhos de fase também aceitam o teclado numérico e funcionam durante a pausa. A troca inicia no ponto de entrada da fase escolhida, sem guardar a posição anterior. Pressionar o número da fase atual não a reinicia.
+Os quatro WAVs de `Assets/Ermo/Audio` foram copiados de `godot/ermo/assets/audio` e ajustados de nível sem clipping; os originais Godot não foram modificados. `Audio Volume`, `Breeze Volume` e `Footstep Volume` ficam no asset; o menu oferece volume geral. A prévia do editor nunca inicia áudio.
 
-## O que está implementado
+## Validação e limites
 
-- Morros poligonais contínuos, caminho estreito sinuoso e grandes espaços vazios.
-- Casas de reboco com alpendre, portas azuis, telhas, cadeira e interior vazio acessível; árvores, cercas, postes e caixas d’água esparsos.
-- Chunks de 64 m com seed por coordenada, fila priorizada por distância, descarregamento e regeneração idêntica ao retornar. Configuração padrão: até 121 chunks ativos.
-- Terreno distante leve, neblina e origem flutuante para percursos longos.
-- Movimento acelerado/amortecido, aderência às encostas, bob por distância percorrida, inclinação lateral e aterrissagem discretos; efeitos desativáveis.
-- Passos em capim, terra e cimento; vento e chamados distantes separados por silêncio. **Áudio sintetizado original, ainda placeholder.**
-- Uma anomalia persistente de repetição, sem entidade ou jumpscare.
-- Renderização interna 640 × 360 com ampliação inteira, texturas nearest e instabilidade geométrica leve nos materiais arquitetônicos.
+### Prévia no editor
 
-## Organização e ajustes
+Abra a cena Ermo e use **Ermo → Refresh 3D Preview**. São criados nove chunks temporários, com malhas, materiais, colisões e props inspecionáveis na Hierarchy/Scene View. Depois de editar `Contours` ou a seed no asset, atualize a prévia. **Clear 3D Preview** remove apenas os objetos marcados como prévia. Não captura o mouse, não toca áudio, não salva chunks e não altera os parâmetros de fog da cena. A prévia não é gravada na cena/build e é removida antes do runtime; céu e efeitos de tela completos são conferidos na Game View com Play.
 
-- `scenes/main.tscn`: fase, sol, ambiente e pausa simples.
-- `scenes/player/player.tscn`: corpo, colisão, cabeça e câmera.
-- `scenes/props/`: objetos reutilizáveis, editáveis no editor.
-- `resources/sitios.tres`: seed, tamanho/raio de chunks, movimento, sensibilidade e áudio.
-- `scripts/world/landscape.gd`: campo de altura, estrada, distribuição e patamares.
-- `scripts/world/chunk_generator.gd`: malha procedural e instâncias das cenas.
-- `scripts/world/chunk_manager.gd`: streaming e origem flutuante.
-- `environment/sitios_environment.tres`, `materials/`, `shaders/`: direção visual.
-- `docs/art_direction.md`: análise das imagens fornecidas, comparação visual e limitações.
-- `tools/build_assets.py`: fonte dos assets originais; não precisa ser executado para jogar.
+**Ermo → Validate Generation** verifica determinismo, coordenadas negativas, separação e cobertura espacial dos locais, as quatro combinações de casa/anexos, inclinações suaves, continuidade do terreno, landmarks, persistência e shaders. Os testes de áudio verificam os clips decodificados, ausência de silêncio/clipping e a cadência sem passos em repouso, pausa ou no ar. Também pode executar em batch com `-executeMethod Ermo.Editor.ErmoTools.ValidateBatch`. A checagem automatizada de áudio não substitui uma audição subjetiva nos alto-falantes/fones do jogador.
 
-Mudanças de seed alteram a disposição. Com a mesma seed, o mundo retorna igual, inclusive após fechar e iniciar novamente. Não há salvamento da posição do jogador nem persistência dos ajustes de pausa. A memória de sons já ouvidos dura uma sessão.
+Para um smoke test com renderização, execute em uma **cópia separada** do projeto com `-batchmode -executeMethod Ermo.Editor.ErmoPlayModeValidation.RunBatch` (sem `-nographics`). Valida a prévia sem duplicação, entra em Play Mode, verifica o carregamento, o framebuffer 640×360 e as alternativas nativa/horizonte. Grava `Logs/ErmoPreview.png` (pós-processado), `Logs/ErmoRawPreview.png` e `Logs/ErmoNativePreview.png`, e fecha o editor com o código de resultado. Uma exceção conhecida do indexador `UnityEditor.Search` é reportada separadamente dos erros de runtime.
 
-## Validação
+O mapa tem expansão sob demanda e não tem uma borda de gameplay, mas ainda usa floats da Unity: viagens muito longas precisarão de floating origin. Escrita e criação de malhas são síncronas por chunk, limitadas por frame; para mundos mais densos, o próximo passo é Jobs e I/O assíncrono. Ainda não há objetivos ou sistema de terror nesta base explorável.
 
-```sh
-godot --headless --editor --path . --import
-godot --headless --path . --script tests/world_test.gd
-godot --headless --path . --script tests/balneario_test.gd
-godot --path . --script tests/capture.gd
-godot --path . --script tests/balneario_capture.gd
-```
-
-O teste verifica determinismo, bordas compartilhadas, colisão inicial, streaming, retorno, origem flutuante, caminhada e pausa. A captura precisa de uma sessão gráfica e salva imagens reais em `captures/`.
-
-### Percurso de avaliação
-
-1. Observe a paisagem inicial: céu amplo, casa isolada à direita e construções menores nas encostas seguintes.
-2. Aproxime-se do alpendre e entre no cômodo vazio. Observe a cadeira, a porta e o número.
-3. Siga a estrada por vários morros; saia dela e retorne. Verifique se os pontos reconhecíveis permanecem iguais.
-4. Alterne F2 e teste subidas, descidas e paradas. Esc deve pausar e retomar pelo botão ou pelo teclado.
-5. Explore por alguns minutos sem procurar um objetivo. A atmosfera depende do vazio e da repetição, não de eventos frequentes.
-
-<details>
-<summary>Anomalia — detalhes para teste (spoiler)</summary>
-
-A casa **13**, com a mesma orientação, cadeira e porta aberta, reaparece a cada quatro intervalos da sequência principal (384 m). A primeira fica perto do ponto inicial; as outras continuam para norte e sul. Não se teletransporta nem muda ao recarregar um chunk. Permanecer perto dela por sete segundos produz um ruído tonal muito baixo vindo do cômodo vazio, uma única vez por casa na sessão.
-
-</details>
-
-Próximo refinamento recomendado: avaliar as capturas e o percurso em conjunto com a referência, ajustar as proporções no Inspector e substituir os placeholders sonoros por gravações rurais próprias, sem aumentar a densidade de objetos.
+A cena original `Assets/Scenes/SampleScene.unity` foi preservada. `Ermo.unity` é a primeira cena da lista de build.
