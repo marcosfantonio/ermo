@@ -13,7 +13,7 @@ namespace Ermo.Editor
         public static void OpenScene()
         {
             if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
-                EditorSceneManager.OpenScene("Assets/Ermo/Scenes/Ermo.unity");
+                EditorSceneManager.OpenScene("Assets/Ermo/Scenes/Sitios.unity");
         }
 
         [MenuItem("Ermo/Select World Settings")]

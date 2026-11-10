@@ -4,7 +4,7 @@ namespace Ermo
 {
     public sealed class WaterWorld : MonoBehaviour
     {
-        public const string ScenePath = "Assets/Ermo/Scenes/WaterWorld.unity";
+        public const string ScenePath = "Assets/Ermo/Scenes/Balneario.unity";
         public static WaterWorld Instance { get; private set; }
         public Vector3 Arrival => transform.position+Vector3.down*.55f;
         public float SurfaceY => transform.position.y;

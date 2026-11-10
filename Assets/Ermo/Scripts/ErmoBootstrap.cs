@@ -37,7 +37,7 @@ namespace Ermo
             }
             if (settings == null || surfaceShader == null || skyShader == null || lensShader == null)
             {
-                Debug.LogError("Ermo: scene references are missing. Open Assets/Ermo/Scenes/Ermo.unity.");
+                Debug.LogError("Ermo: scene references are missing. Open Assets/Ermo/Scenes/Sitios.unity.");
                 enabled = false; return;
             }
             seedInput = settings.seed;

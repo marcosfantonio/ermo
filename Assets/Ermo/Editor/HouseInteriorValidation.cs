@@ -168,6 +168,7 @@ namespace Ermo.Editor
                 Color[] open = Capture(camera, target);
                 RequireExteriorIdentity(baseline, open);
                 Require(open[64*128+45].r > closed[64*128+45].r * 2, "Opening did not illuminate nearby interior.");
+                Require(open[64*128+83].r > closed[64*128+83].r * 2, "Aperture light must also reach the far side of the room.");
                 Require(open[64*128+45].r > open[64*128+83].r * 1.5f, "An opening must not brighten the whole room equally.");
 
                 // Roof outside stays unchanged even when it lies over the room footprint.

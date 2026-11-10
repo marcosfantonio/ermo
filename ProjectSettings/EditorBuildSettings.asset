@@ -6,13 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Ermo/Scenes/Ermo.unity
+    path: Assets/Ermo/Scenes/Sitios.unity
     guid: 1838eb76331b4522b7d5c68fdf0d8207
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Ermo/Scenes/WaterWorld.unity
+    path: Assets/Ermo/Scenes/Balneario.unity
     guid: 2a73001abcaa461092bb36a5c0e90008
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

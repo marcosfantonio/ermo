@@ -42,7 +42,7 @@ namespace Ermo
                 else if (Breeze.clip != null) Breeze.Play();
             }
             float gust = .78f+Mathf.PerlinNoise(Time.time*.07f,29.1f)*.34f;
-            Breeze.volume = settings.audioVolume*settings.breezeVolume*1.3f*gust;
+            Breeze.volume = Mathf.Clamp01(settings.audioVolume*settings.breezeVolume*1.3f*2.5f*gust);
             Vector3 delta = transform.position-previousPosition; previousPosition = transform.position;
             float distance = new Vector2(delta.x,delta.z).magnitude;
             if (walker.MenuOpen && Footsteps.isPlaying) Footsteps.Stop();

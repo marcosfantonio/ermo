@@ -4,7 +4,7 @@ namespace Ermo
 {
     public sealed class HouseInteractable : MonoBehaviour
     {
-        private static AudioClip doorOpenClip, doorCloseClip, windowOpenClip, windowCloseClip;
+        private static AudioClip doorClip, windowOpenClip, windowCloseClip;
         private static bool soundsLoaded;
         private HouseHinge[] hinges;
         private Quaternion closedRotation;
@@ -49,19 +49,16 @@ namespace Ermo
                 openRotation = Quaternion.AngleAxis(side >= 0 ? 90f : -90f, Vector3.up) * closedRotation;
             }
             ApplyOpenState(false);
-            AudioClip clip = isDoor
-                ? (isOpen ? doorOpenClip : doorCloseClip)
-                : (isOpen ? windowOpenClip : windowCloseClip);
-            if (clip != null) AudioSource.PlayClipAtPoint(clip, soundPosition, .72f);
+            AudioClip clip = isDoor ? doorClip : (isOpen ? windowOpenClip : windowCloseClip);
+            if (clip != null) AudioSource.PlayClipAtPoint(clip, soundPosition, isDoor ? .72f : .432f);
         }
 
         private static void LoadSounds()
         {
             if (soundsLoaded) return;
-            doorOpenClip = Resources.Load<AudioClip>("Ermo/Audio/door_open");
-            doorCloseClip = Resources.Load<AudioClip>("Ermo/Audio/door_close");
-            windowOpenClip = Resources.Load<AudioClip>("Ermo/Audio/window_open");
-            windowCloseClip = Resources.Load<AudioClip>("Ermo/Audio/window_close");
+            doorClip = Resources.Load<AudioClip>("Ermo/Audio/abrir_porta");
+            windowOpenClip = Resources.Load<AudioClip>("Ermo/Audio/window_open_custom");
+            windowCloseClip = Resources.Load<AudioClip>("Ermo/Audio/window_close_custom");
             soundsLoaded = true;
         }
 

@@ -8,7 +8,7 @@
 4. Entre ou pule na abertura central. A passagem começa quando a cabeça atravessa a água em queda, não ao simplesmente se aproximar da torre.
 5. O mergulho continua, a câmera se inverte sob a água e emerge de pé do outro lado. WASD, mouse e salto voltam a funcionar normalmente.
 
-O destino inicial é **`Assets/Ermo/Scenes/WaterWorld.unity`**: somente água e céu, sem costa ou construções. Há um piso de colisão submerso e invisível para o jogador poder emergir e explorar em pé. Voltar a uma seed pelo menu recria a exploração rural; ainda não há passagem de retorno pela água.
+O destino inicial é **`Assets/Ermo/Scenes/Balneario.unity`**: somente água e céu, sem costa ou construções. Há um piso de colisão submerso e invisível para o jogador poder emergir e explorar em pé. Voltar a uma seed pelo menu recria **Sitios**; ainda não há passagem de retorno pela água.
 
 ## Integração
 
@@ -29,7 +29,7 @@ No reservatório, `_WellDepth` ativa um volume óptico cilíndrico de 7,5 unidad
 
 Durante o mergulho, `PixelLens` acrescenta distorção, absorção de vermelho, dispersão e bolhas animadas em espaço de tela, preservando o cenário visível (não uma tela azul uniforme). O jogador cai normalmente na primeira metade do tanque; na segunda metade, câmera e corpo viram gradualmente, acompanhando a inversão da gravidade. A passagem de cena acontece junto à superfície inferior, seguida da emersão para cima no outro mar. O perfil Dreamcore, a captura 640×480/30 fps, a interface e o processamento da câmera são preservados.
 
-`WaterImmersionEffects` reproduz splash ao entrar, ruído grave/borbulhamento contínuo e splash de saída ao cruzar a superfície do destino. As fontes de áudio presentes na entrada recebem filtro passa-baixas até 650 Hz enquanto submerso; filtros preexistentes são preservados/restaurados. Os efeitos respeitam o volume do jogo e pausam no menu. Os clipes são sintetizados localmente (ruído filtrado e ressonâncias de bolhas), não gravações reais de água. Ao emergir, gotas refratam a imagem e escorrem pela lente durante sete segundos. Bolhas são um efeito óptico procedural, não partículas volumétricas simuladas.
+`WaterImmersionEffects` reproduz `water_jump.wav` ao entrar, ruído grave/borbulhamento contínuo e splash de saída ao cruzar a superfície do destino. Ao caminhar no mundo da água, passos geram respingos procedurais cadenciados pelo deslocamento real. As fontes de áudio presentes na entrada recebem filtro passa-baixas até 650 Hz enquanto submerso; filtros preexistentes são preservados/restaurados. Os efeitos respeitam o volume do jogo e pausam no menu. O ruído subaquático, o splash de saída e os passos na água são sintetizados localmente. Ao emergir, gotas refratam a imagem e escorrem pela lente durante sete segundos. Bolhas são um efeito óptico procedural, não partículas volumétricas simuladas.
 
 A inversão é uma coreografia local da câmera e da trajetória vertical entre as duas superfícies, não uma alteração de `Physics.gravity` que afetaria o mapa inteiro. Visualmente, a gravidade é normal até a metade e vira junto com o jogador no restante do percurso, que termina com o personagem em pé.
 

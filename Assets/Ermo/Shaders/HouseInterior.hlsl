@@ -17,7 +17,8 @@ float3 ErmoRoomLighting(float3 world, float3 normal, float3 sunDirection)
     // A sloping roof's exterior can lie over the room footprint, but is NOT an interior surface.
     if (_ErmoInteriorRoof > .5 && localNormal.y >= -.05) return float3(1, 1, 0);
 
-    float ambient = .025;
+    // Retain a little readable fill even with every aperture shut.
+    float ambient = .10;
     float direct = 0;
     float3 ray = normalize(mul((float3x3)_ErmoInteriorWorldToLocal, sunDirection));
     for (int i = 0; i < _ErmoPortalCount; i++)
@@ -32,9 +33,13 @@ float3 ErmoRoomLighting(float3 world, float3 normal, float3 sunDirection)
         float3 nearest = clamp(air, low, high);
         float distanceToOpening = length(air - nearest);
         float area = size.y * (xPlane ? size.z : size.x);
-        float reach = max(.5, sqrt(area) * 2);
-        float falloff = 1 - smoothstep(0, reach, distanceToOpening);
-        ambient += opening * falloff * falloff * .8;
+        // A soft tail carries aperture light into the room instead of cutting it off nearby.
+        float reach = max(1.5, sqrt(area) * 2.5);
+        float relativeDistance = distanceToOpening / reach;
+        float falloff = rcp(1 + relativeDistance * relativeDistance);
+        // Small room-wide bounce approximates light reflected by the interior walls.
+        float bounce = .08 * saturate(area);
+        ambient += opening * (falloff * .85 + bounce);
 
         // Direct sunlight only travels along rays that actually cross an open aperture.
         float direction = xPlane ? ray.x : ray.z;

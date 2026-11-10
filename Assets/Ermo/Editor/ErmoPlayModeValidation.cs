@@ -30,7 +30,7 @@ namespace Ermo.Editor
         {
             if (!Application.isBatchMode) throw new InvalidOperationException("This test is for a separate batch editor only.");
             ErmoTools.Validate();
-            EditorSceneManager.OpenScene("Assets/Ermo/Scenes/Ermo.unity");
+            EditorSceneManager.OpenScene("Assets/Ermo/Scenes/Sitios.unity");
             ErmoScenePreview.Refresh();
             ErmoScenePreview.Refresh();
             var preview = ErmoPreview.FindLive();

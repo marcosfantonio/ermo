@@ -20,6 +20,8 @@ namespace Ermo
         private WaterTowerAccess ladder, candidate;
         private float climbHeight, elapsed, entryPitch, sourceYaw;
         private Vector3 entryPosition, deepPosition, destinationDeep;
+        private Vector3 previousWaterPosition;
+        private float waterStepDistance, climbStepDistance;
         private GUIStyle prompt;
         private Vector3 previousHead;
         private bool mantling;
@@ -31,6 +33,7 @@ namespace Ermo
             walker = player; sourceEnvironment = source;
             Effects = gameObject.AddComponent<WaterImmersionEffects>(); Effects.Initialize(settings);
             previousHead = player.View.transform.position;
+            previousWaterPosition = player.transform.position;
             if (WaterWorld.Instance == null && (preload == null || preload.isDone))
                 preload = SceneManager.LoadSceneAsync(WaterWorld.ScenePath,LoadSceneMode.Additive);
         }
@@ -39,10 +42,15 @@ namespace Ermo
         {
             if (walker == null) return;
             Effects.Tick(Immersion,walker.MenuOpen,Time.deltaTime);
-            if (walker.MenuOpen || walker.WakingUp || !walker.enabled) return;
+            if (walker.MenuOpen || walker.WakingUp || !walker.enabled)
+            {
+                previousWaterPosition = walker.transform.position;
+                waterStepDistance = 0;
+                return;
+            }
             if (State == PassageState.Climbing) { TickLadder(); return; }
             if (State == PassageState.Diving || State == PassageState.Emerging) { TickCrossing(); return; }
-            if (State == PassageState.WaterWorld) return;
+            if (State == PassageState.WaterWorld) { TickWaterSteps(); return; }
             candidate = null;
             foreach (var tower in WaterTowerAccess.Live)
             {
@@ -56,13 +64,27 @@ namespace Ermo
                 AttachLadder(candidate);
         }
 
+        private void TickWaterSteps()
+        {
+            Vector3 position = walker.transform.position;
+            float distance = Vector2.Distance(new Vector2(position.x,position.z),
+                new Vector2(previousWaterPosition.x,previousWaterPosition.z));
+            previousWaterPosition = position;
+            if (!walker.Grounded || walker.MenuOpen) { waterStepDistance = 0; return; }
+            waterStepDistance += distance;
+            float cadence = walker.IsRunning ? 1.25f : .9f;
+            if (waterStepDistance < cadence) return;
+            waterStepDistance %= cadence;
+            Effects.PlayWaterStep(walker.IsRunning);
+        }
+
         private void LateUpdate() { if (walker != null) previousHead = walker.View.transform.position; }
 
         public bool AttachLadder(WaterTowerAccess tower)
         {
             if (tower == null || !tower.NearLadder(walker.transform.position) || !walker.BeginTraversal(false)) return false;
             ladder = tower; State = PassageState.Climbing;
-            mantling = false;
+            mantling = false; climbStepDistance = 0;
             climbHeight = Mathf.Clamp(tower.transform.InverseTransformPoint(walker.transform.position).y,.05f,WaterTowerAccess.RimHeight);
             return true;
         }
@@ -83,7 +105,17 @@ namespace Ermo
         public void AdvanceClimb(float input, float dt)
         {
             if (State != PassageState.Climbing || ladder == null) return;
+            float previousHeight = climbHeight;
             climbHeight = Mathf.Clamp(climbHeight+input*2.4f*dt/ladder.transform.lossyScale.y,.05f,WaterTowerAccess.RimHeight+.18f);
+            if (!mantling && input != 0)
+            {
+                climbStepDistance += Mathf.Abs(climbHeight-previousHeight)*ladder.transform.lossyScale.y;
+                if (climbStepDistance >= .55f)
+                {
+                    climbStepDistance %= .55f;
+                    Effects.PlayLadderStep();
+                }
+            }
             Vector3 target = mantling ? ladder.TopLanding : ladder.LadderPoint(climbHeight);
             walker.MoveOnLadder(Vector3.ClampMagnitude(target-walker.transform.position,dt*6));
             if (mantling && Vector3.Distance(walker.transform.position,target) < .06f)
@@ -138,6 +170,7 @@ namespace Ermo
                 if (t >= 1)
                 {
                     Immersion = 0; walker.EndTraversal(); State = PassageState.WaterWorld;
+                    previousWaterPosition = walker.transform.position; waterStepDistance = 0;
                 }
             }
         }
@@ -158,6 +191,8 @@ namespace Ermo
             var rural = walker.GetComponent<RuralAudio>();
             if (rural != null) { rural.Breeze.Stop(); rural.Footsteps.Stop(); rural.enabled = false; }
             destinationDeep = destination.transform.position+Vector3.down*4;
+            previousWaterPosition = destinationDeep;
+            waterStepDistance = 0;
             walker.transform.rotation = Quaternion.Euler(0,sourceYaw,0);
             walker.SetTraversalPose(destinationDeep,-entryPitch,180);
             elapsed = 0; State = PassageState.Emerging;

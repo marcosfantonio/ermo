@@ -12,7 +12,7 @@ namespace Ermo.Editor
             var bootstrap = Object.FindFirstObjectByType<ErmoBootstrap>();
             if (bootstrap == null || bootstrap.Configuration == null)
             {
-                Debug.LogWarning("Abra Assets/Ermo/Scenes/Ermo.unity antes de gerar a prévia."); return;
+                Debug.LogWarning("Abra Assets/Ermo/Scenes/Sitios.unity antes de gerar a prévia."); return;
             }
             Clear();
             var settings = Object.Instantiate(bootstrap.Configuration);
