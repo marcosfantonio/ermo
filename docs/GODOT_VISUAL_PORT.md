@@ -1,6 +1,8 @@
 # Port visual Godot → Unity
 
-> **Ajustes posteriores — perfil atual:** a base portada continua disponível, mas o padrão usa found footage de intensidade intermediária: até 540 linhas com ampliação pixelada, grão 0,014 em espaço de exibição, dither 0,08, saturação 1,22 e pequenas imperfeições analógicas. Os contornos têm altura ×0,65 e largura ×1,65, normais suaves e deformação orgânica por seed. Para comparar a fórmula original do terreno, use ambas as escalas em 1, desligue `Organic Hills` e `Smooth Terrain Normals`. O histórico abaixo explica a referência Godot, não os novos valores padrão.
+> **Sistema de câmera atual:** consulte [CYBERSHOT_CAMERA.md](CYBERSHOT_CAMERA.md). O jogo usa exclusivamente ERMO Dreamcore, com captura a 30 fps sempre ativa, névoa de distância, metering de exposição/AWB, CCD e compressão em passes separados, histórico temporal, motion blur URP e `HandheldCameraMotion`. O movimento orgânico em repouso tem ganho adicional de 5%. Os valores descritos no histórico abaixo não substituem o perfil atual, e as antigas alternativas não são opções do jogador.
+
+> **Ajustes posteriores — base visual:** captura 640×480 em 4:3, bilinear, foco suave com realce eletrônico de bordas, ruído CCD, clipping de highlights, óptica de barril e aberração cromática radial discreta. Sem tracking, scanlines ou glitches de fita. Os contornos têm altura ×0,65 e largura ×1,65, normais suaves e deformação orgânica por seed. Para comparar a fórmula original do terreno no editor, use ambas as escalas em 1, desligue `Organic Hills` e `Smooth Terrain Normals`. O histórico abaixo explica a referência original, não as configurações atuais de gameplay.
 
 ## O que está realmente ativo no Godot
 

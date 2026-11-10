@@ -26,6 +26,9 @@ namespace Ermo.Editor
         public static void Validate()
         {
             var settings = ScriptableObject.CreateInstance<WorldSettings>();
+            ValidateDigitalCamera(settings);
+            ValidateDigitalCamera(AssetDatabase.LoadAssetAtPath<WorldSettings>("Assets/Ermo/Settings/MeadowWorld.asset"));
+            CyberShotValidation.Validate();
             settings.seed = "ermo-validation-v1";
             var sampler = new WorldSampler(settings);
             var coordinates = new[] { Vector2Int.zero, new Vector2Int(-1, -1), new Vector2Int(4, -7), new Vector2Int(12, 9) };
@@ -79,9 +82,9 @@ namespace Ermo.Editor
                 string path = $"Assets/Ermo/Textures/{name}.png";
                 var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
                 var importer = AssetImporter.GetAtPath(path) as TextureImporter;
-                Require(texture != null && importer != null,"Missing Godot texture: "+name);
+                Require(texture != null && importer != null,"Missing surface texture: "+name);
                 Require(importer.filterMode == FilterMode.Point && importer.wrapMode == TextureWrapMode.Repeat &&
-                    importer.sRGBTexture && !importer.mipmapEnabled,"Godot nearest/repeat import mismatch: "+name);
+                    importer.sRGBTexture && !importer.mipmapEnabled,"Surface nearest/repeat import mismatch: "+name);
             }
             var store = new WorldStore(settings, Path.GetFullPath("Temp/ErmoValidation"));
             store.Save(exact);
@@ -91,7 +94,9 @@ namespace Ermo.Editor
             settings.chunkSize = 200;
             new WorldStore(settings, Path.GetFullPath("Temp/ErmoValidation"));
             Require(settings.chunkSize == size, "World manifest did not restore terrain parameters");
-            foreach (string name in new[] { "Ermo/Meadow", "Ermo/Dream Sky", "Ermo/Pixel Lens" })
+            Require(AssetDatabase.LoadAssetAtPath<SceneAsset>(WaterWorld.ScenePath) != null,"Missing water destination scene.");
+            Require(Array.Exists(EditorBuildSettings.scenes,s => s.enabled && s.path == WaterWorld.ScenePath),"Water destination must be included in builds.");
+            foreach (string name in new[] { "Ermo/Meadow", "Ermo/Dream Sky", "Ermo/Pixel Lens", "Ermo/Deep Water", "Ermo/Reservoir Water", "Ermo/Other Side Sky" })
             {
                 var shader = Shader.Find(name);
                 Require(shader != null, "Missing shader " + name);
@@ -127,6 +132,21 @@ namespace Ermo.Editor
             Debug.Log("ERMO VALIDATION PASSED: determinism, negative coordinates, group spacing/combinations, landmark rules, persistence, terrain seams and shaders.");
         }
 
+        private static void ValidateDigitalCamera(WorldSettings settings)
+        {
+            Require(settings != null && settings.foundFootage && !settings.legacyVhs,"Digital camera profile must be active, not VHS.");
+            Require(settings.captureInstability == 0 && settings.analogArtifacts == 0 && settings.dither == 0,
+                "Digital camera defaults must not include analog artifacts.");
+            Require(settings.lensDistortion > 0 && settings.lensDistortion <= .08f && settings.chromatic > 0 && settings.chromatic <= .5f,
+                "Digital camera defaults must retain barrel optics and subtle chromatic aberration.");
+            Require(!settings.pixelatedUpscale && !settings.godotPixelGrid && settings.renderHeight == 480,
+                "Digital camera profile must use a bilinear 480-line capture, not the legacy pixel grid.");
+            Require(settings.captureExposure > 0 && settings.captureSaturation > 1 && settings.captureSharpness > 0 &&
+                settings.captureBloom > 0 && settings.captureBloom <= .15f && settings.vignette <= .05f && settings.filmGrain <= .02f &&
+                settings.digitalCompression > 0 && settings.digitalCompression <= .45f,
+                "Digital camera defaults must remain bright, colorful and subtly textured.");
+        }
+
         private static void ValidateGodotTerrain(WorldSettings settings)
         {
             float heightScale = settings.contourHeightScale, widthScale = settings.contourWidthScale;
@@ -144,7 +164,7 @@ namespace Ermo.Editor
                         float pz = (z-dz*settings.contourRepeat.y-hill.position.z)/hill.width.y;
                         expected += hill.position.y*Mathf.Exp(-2*(px*px+pz*pz));
                     }
-            Require(Mathf.Abs(expected-field.Height(x,z)) < .0001f,"Godot Gaussian contour formula diverged");
+            Require(Mathf.Abs(expected-field.Height(x,z)) < .0001f,"Gaussian contour formula diverged");
             settings.contourHeightScale = heightScale; settings.contourWidthScale = widthScale;
             settings.organicHills = organic;
             float maximumSlope = 0;
@@ -162,7 +182,7 @@ namespace Ermo.Editor
             var oldRules = settings.landmarks;
             settings.landmarks = new[] { new LandmarkRule { id = "yard",exactChunk = true,chunk = Vector2Int.zero,localPosition = new Vector2(38,38) } };
             field = new WorldSampler(settings);
-            Require(Mathf.Abs(field.Height(38,38)-field.BaseHeight(38,38)-1)<.0001f,"Godot yard flattening failed");
+            Require(Mathf.Abs(field.Height(38,38)-field.BaseHeight(38,38)-1)<.0001f,"Yard flattening failed");
             settings.landmarks = oldRules;
         }
 

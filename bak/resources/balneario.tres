@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="WorldSettings" load_steps=2 format=3]
-[ext_resource type="Script" path="res://resources/world_settings.gd" id="1"]
-[resource]
-script = ExtResource("1")
-world_seed = 19881998
-chunk_size = 64
-view_radius = 3
-camera_motion = 0.85

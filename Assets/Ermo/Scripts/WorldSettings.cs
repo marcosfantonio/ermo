@@ -40,11 +40,15 @@ namespace Ermo
         [Range(0, 1)] public float waterTowerChance = .3f;
         [Range(0, 1)] public float turbineChance = .12f;
         [Header("Camera")]
+        public CyberShotProfile cameraProfile;
         [Tooltip("0 = native screen resolution; otherwise caps the internal height.")]
-        [Range(0, 2160)] public int renderHeight = 540;
-        public bool godotPixelGrid;
-        public bool pixelatedUpscale = true;
-        [Range(50, 100)] public float fieldOfView = 73f;
+        [Range(0, 2160)] public int renderHeight = 480;
+        [Tooltip("4:3 framing like early Cyber-shot video / digital Handycam. Disable for widescreen.")]
+        public bool captureFourThree = true;
+        [HideInInspector] public bool godotPixelGrid;
+        public bool pixelatedUpscale;
+        [Range(50, 100)] public float fieldOfView = 58f;
+        [Tooltip("Barrel / fisheye intensity; also applied to the digital camera profile.")]
         [Range(0, .3f)] public float lensDistortion = .042f;
         [Range(0, 2)] public float headBob = 1f;
         [Range(.3f, 1.2f)] public float walkSwayFrequency = .68f;
@@ -57,22 +61,32 @@ namespace Ermo
         [Range(1, 6)] public float fogOpticalDepth = 3.8f;
         [Range(0, .6f)] public float fogCloudiness = .28f;
         public FogStyle fogStyle = FogStyle.GodotExponential;
-        [Range(0, .02f)] public float godotFogDensity = .0035f;
+        [InspectorName("Fog Density"), Range(0, .02f)] public float godotFogDensity = .0035f;
         [Range(0, 1)] public float fogAerialPerspective = .3f;
-        [Header("Godot materials / memory optics")]
+        [Header("Materials / memory optics")]
         public Texture2D grassTexture, plasterTexture, roofTexture, woodTexture;
         [Range(0, 1)] public float vertexWobble = .035f;
         [Range(0, 1)] public float filmGrain = .014f;
-        [Range(0, 1)] public float vignette = .18f;
+        [Range(0, 1)] public float vignette = .045f;
+        [Tooltip("Radial red/blue offset in capture pixels; strongest near the corners.")]
         [Range(0, 2)] public float chromatic = .3f;
-        [Range(0, 1)] public float dither = .08f;
-        [Header("Found footage — subtle camcorder, not heavy VHS")]
+        [Range(0, 1)] public float dither;
+        [Header("2000s digital camera — sunny childhood memory")]
+        [InspectorName("Digital Camera (2000s)")]
+        [Tooltip("Consumer digital camera look. Serialized name retained for existing worlds; no analog artifacts.")]
         public bool foundFootage = true;
-        [Range(0, 1)] public float captureSoftness = .22f;
-        [Range(0, 2)] public float captureSaturation = 1.22f;
-        [Range(.5f, 1.5f)] public float captureContrast = 1.05f;
-        [Range(0, 1)] public float captureInstability = .16f;
-        [Range(0, 1)] public float analogArtifacts = .32f;
+        [Range(0, 1)] public float captureSoftness = .24f;
+        [Range(0, 2)] public float captureSaturation = 1.16f;
+        [Range(.5f, 1.5f)] public float captureContrast = 1.13f;
+        [Tooltip("Exposure compensation in stops; highlights intentionally clip like an early digital camera.")]
+        [Range(-1, 1)] public float captureExposure = .35f;
+        [Range(0, 1)] public float captureSharpness = .65f;
+        [Range(0, .3f)] public float captureBloom = .12f;
+        [Tooltip("Subtle block chroma and quantization approximation, not a JPEG encoder.")]
+        [Range(0, 1)] public float digitalCompression = .38f;
+        [HideInInspector] public float captureInstability;
+        [HideInInspector] public float analogArtifacts;
+        [Header("Legacy VHS — optional, not part of the digital camera profile")]
         public bool legacyVhs;
         [Range(0, 1)] public float tapeStrength = .7f;
         [Range(0, 2)] public float tapeSaturation = 1.45f;
@@ -91,8 +105,8 @@ namespace Ermo
     }
 
     public enum PropKind { House, OpenHouse, WaterTower, Turbine, Pole }
-    public enum TerrainStyle { Perlin, GodotContours, GodotLegacyWaves }
-    public enum FogStyle { HorizonOnly, GodotExponential }
+    public enum TerrainStyle { Perlin, [InspectorName("Organic Contours")] GodotContours, [InspectorName("Legacy Waves")] GodotLegacyWaves }
+    public enum FogStyle { HorizonOnly, [InspectorName("Exponential Distance")] GodotExponential }
 
     [Serializable]
     public sealed class HillContour

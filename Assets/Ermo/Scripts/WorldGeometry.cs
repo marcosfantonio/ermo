@@ -6,34 +6,48 @@ namespace Ermo
     public sealed class WorldPalette
     {
         private readonly List<Material> owned = new List<Material>();
-        public readonly Material grass, road, plaster, roof, wood, glass, dark, white, tank, wire;
+        public readonly Material grass, road, plaster, roof, wood, glass, stone, door, dark, white, tank, wire, water, waterUnder;
         public WorldPalette(Shader shader, WorldSettings settings = null)
         {
             grass = Make(shader, "Meadow", Color.white);
-            road = Make(shader, "Chalk path", new Color(.79f, .76f, .64f));
+            road = Make(shader, "Chalk path", new Color(.84f, .77f, .59f));
             plaster = Make(shader, "Ivory walls", new Color(.94f, .91f, .71f));
             roof = Make(shader, "Faded sage roof", new Color(.47f, .57f, .53f));
             wood = Make(shader, "Weathered timber", new Color(.31f, .23f, .15f));
             glass = Make(shader, "Blue windows", new Color(.17f, .38f, .48f));
+            stone = Make(shader, "Stone floor", new Color(.84f, .87f, .83f));
+            door = Make(shader, "Blue painted door", Color.white);
             dark = Make(shader, "Unlit interior", new Color(.055f, .075f, .075f));
             white = Make(shader, "Chalk white", new Color(.91f, .94f, .84f));
             tank = Make(shader, "Water tank", new Color(.69f, .77f, .70f));
             wire = Make(shader, "Power cable", new Color(.12f, .15f, .16f));
+            water = Make(Resources.Load<Shader>("Ermo/Water/ReservoirWater"),"Clear reservoir water",new Color(.35f,.75f,.78f));
+            water.SetFloat("_WaterOpacity",.32f);
+            water.SetFloat("_WellDepth",7.5f);
+            water.SetFloat("_WellRadius",WaterTowerAccess.InnerRadius);
+            waterUnder = Make(Resources.Load<Shader>("Ermo/Water/ReservoirWater"),"Inverted lower water surface",new Color(.35f,.75f,.78f));
+            waterUnder.SetFloat("_OtherWorldView",1);
+            waterUnder.SetFloat("_PortalInverted",1);
+            waterUnder.SetFloat("_WaterOpacity",1);
             grass.SetFloat("_Grass", 1);
             road.SetFloat("_Road", 1);
             if (settings != null)
             {
                 grass.SetTexture("_MainTex", settings.grassTexture);
-                road.SetTexture("_MainTex", settings.grassTexture);
-                road.SetColor("_BaseColor", new Color(.72f,.46f,.25f));
-                road.SetFloat("_Grass", 1);
+                road.SetTexture("_MainTex", null);
+                road.SetColor("_BaseColor", new Color(.84f,.77f,.59f));
+                road.SetFloat("_Grass", 0);
                 plaster.SetTexture("_MainTex", settings.plasterTexture);
                 plaster.SetColor("_BaseColor", new Color(1,.98f,.91f)); plaster.SetFloat("_TextureScale",2);
                 roof.SetTexture("_MainTex", settings.roofTexture); roof.SetColor("_BaseColor", Color.white); roof.SetFloat("_TextureScale",4);
                 wood.SetTexture("_MainTex", settings.woodTexture); wood.SetColor("_BaseColor",Color.white);
-                glass.SetColor("_BaseColor",new Color(.12f,.33f,.39f));
+                door.SetTexture("_MainTex", Resources.Load<Texture2D>("Ermo/blue_door")); door.SetFloat("_TextureScale",2);
+                glass.SetTexture("_MainTex", Resources.Load<Texture2D>("Ermo/glass"));
+                glass.SetColor("_BaseColor",new Color(.68f,.84f,.91f));
+                stone.SetTexture("_MainTex", Resources.Load<Texture2D>("Ermo/stone_ps1"));
+                stone.SetFloat("_TextureScale",1.5f);
                 foreach (var material in owned)
-                    if (material != grass && material != road) material.SetFloat("_Wobble",settings.vertexWobble);
+                    if (material != grass && material != road && material != water && material != waterUnder) material.SetFloat("_Wobble",settings.vertexWobble);
             }
         }
         private Material Make(Shader shader, string name, Color color)
@@ -53,6 +67,9 @@ namespace Ermo
 
     public static class WorldGeometry
     {
+        private static GameObject houseModel;
+        private static bool houseModelLoaded;
+
         public static GameObject BuildChunk(ChunkRecord record, WorldSettings settings, WorldSampler sampler,
             WorldPalette palette, Transform parent)
         {
@@ -161,6 +178,8 @@ namespace Ermo
 
         private static void House(Transform root, bool open, WorldPalette p)
         {
+            if (TryBuildHouseModel(root, p, open)) return;
+
             // Separate walls leave a real doorway, not a painted black rectangle.
             Part(root, "Foundation", PrimitiveType.Cube, new Vector3(0, -1.3f, 0), new Vector3(7.4f, 3.2f, 8.4f), p.plaster);
             Part(root, "Floor", PrimitiveType.Cube, new Vector3(0, .3f, 0), new Vector3(7, .2f, 8), p.wood);
@@ -191,6 +210,67 @@ namespace Ermo
             for (int i = 0; i < roofUV.Length; i++) roofUV[i] = new Vector2(roofMesh.vertices[i].x,roofMesh.vertices[i].z)*.15f;
             roofMesh.uv = roofUV;
             MeshObject("Roof", root, roofMesh, p.roof, false);
+            root.gameObject.AddComponent<HouseInteriorLighting>().Initialize(p.plaster, p.roof, true, open);
+        }
+
+        private static bool TryBuildHouseModel(Transform root, WorldPalette p, bool open)
+        {
+            if (!houseModelLoaded)
+            {
+                houseModel = Resources.Load<GameObject>("Ermo/casa_alpende_1");
+                houseModelLoaded = true;
+            }
+            if (houseModel == null) return false;
+
+            var instance = Object.Instantiate(houseModel, root, false);
+            instance.name = "Casa Alpende 1";
+            instance.transform.localPosition = Vector3.zero;
+            instance.transform.localRotation = Quaternion.identity;
+            // The authored model is about twice the dimensions of the procedural cottage.
+            instance.transform.localScale = Vector3.one * .5f;
+            float lowestPoint = float.PositiveInfinity;
+            foreach (var renderer in instance.GetComponentsInChildren<Renderer>(true))
+                lowestPoint = Mathf.Min(lowestPoint, renderer.bounds.min.y);
+            if (!float.IsPositiveInfinity(lowestPoint))
+            {
+                Vector3 position = instance.transform.position;
+                position.y += root.position.y - .08f - lowestPoint;
+                instance.transform.position = position;
+            }
+            foreach (Transform node in instance.GetComponentsInChildren<Transform>(true))
+            {
+                string nodeName = node.name.ToLowerInvariant();
+                if (nodeName.StartsWith("house_door") || nodeName.StartsWith("house_window"))
+                    node.gameObject.AddComponent<HouseInteractable>();
+                if (nodeName.Contains("windowleaf_openp") || nodeName.Contains("windowleaf_openn"))
+                    node.gameObject.AddComponent<HouseHinge>();
+            }
+            foreach (var renderer in instance.GetComponentsInChildren<Renderer>(true))
+            {
+                Material material = null;
+                for (Transform node = renderer.transform; node != null && node != instance.transform; node = node.parent)
+                {
+                    string nodeName = node.name.ToLowerInvariant();
+                    if (nodeName.Contains("house_teto")) { material = p.roof; break; }
+                    if (nodeName.Contains("house_walls")) { material = p.plaster; break; }
+                    if (nodeName.Contains("house_floor")) { material = p.stone; break; }
+                    if (nodeName.Contains("house_door")) { material = p.door; break; }
+                    if (nodeName.Contains("house_window")) { material = p.glass; break; }
+                }
+                if (material != null) renderer.sharedMaterial = material;
+            }
+            var interior = root.gameObject.AddComponent<HouseInteriorLighting>();
+            interior.Initialize(p.plaster, p.roof);
+            foreach (var interactable in instance.GetComponentsInChildren<HouseInteractable>(true))
+                interactable.Bind(root.name, open);
+            interior.RefreshOpenings();
+            foreach (var filter in instance.GetComponentsInChildren<MeshFilter>(true))
+            {
+                if (filter.sharedMesh == null || filter.GetComponent<Collider>() != null) continue;
+                var collider = filter.gameObject.AddComponent<MeshCollider>();
+                collider.sharedMesh = filter.sharedMesh;
+            }
+            return true;
         }
 
         private static void Tower(Transform root, WorldPalette p)
@@ -199,10 +279,62 @@ namespace Ermo
                 foreach (float z in new[] { -1.4f, 1.4f })
                     Part(root, "Leg", PrimitiveType.Cube, new Vector3(x, 4.5f, z), new Vector3(.28f, 10, .28f), p.white);
             Part(root, "Platform", PrimitiveType.Cube, new Vector3(0, 8.4f, 0), new Vector3(3.8f, .22f, 3.8f), p.white);
-            Part(root, "Tank", PrimitiveType.Cylinder, new Vector3(0, 10.2f, 0), new Vector3(3.5f, 1.7f, 3.5f), p.tank);
-            Part(root, "Lid", PrimitiveType.Cylinder, new Vector3(0, 11.94f, 0), new Vector3(3.7f, .1f, 3.7f), p.white, false);
-            for (int i = 1; i <= 7; i++)
-                Part(root, "Ladder rung", PrimitiveType.Cube, new Vector3(0, i * 1.1f, -1.5f), new Vector3(1, .1f, .12f), p.white, false);
+            TowerRing(root,"Water tower shell",1.55f,1.75f,8.5f,11.95f,p.tank);
+            TowerRing(root,"Water tower rim",1.55f,2.55f,11.85f,WaterTowerAccess.RimHeight,p.white);
+            for (int side = -1; side <= 1; side += 2)
+                Part(root,"Ladder rail",PrimitiveType.Cube,new Vector3(side*.48f,6.35f,-2.55f),new Vector3(.075f,12.7f,.075f),p.white,false);
+            for (int i = 1; i <= 38; i++)
+                Part(root,"Ladder rung",PrimitiveType.Cube,new Vector3(0,i*.32f,-2.55f),new Vector3(1,.065f,.075f),p.white,false);
+            var surface = new Mesh { name = "Water tower surface" };
+            var points = new List<Vector3> { Vector3.up*WaterTowerAccess.SurfaceHeight };
+            var uv = new List<Vector2> { new Vector2(.5f,.5f) };
+            var indices = new List<int>();
+            for (int i = 0; i <= 48; i++)
+            {
+                float angle = i*Mathf.PI*2/48;
+                points.Add(new Vector3(Mathf.Cos(angle)*1.55f,WaterTowerAccess.SurfaceHeight,Mathf.Sin(angle)*1.55f));
+                uv.Add(new Vector2(.5f+Mathf.Cos(angle)*.5f,.5f+Mathf.Sin(angle)*.5f));
+                if (i < 48) indices.AddRange(new[] { 0,i+2,i+1 });
+            }
+            surface.SetVertices(points); surface.SetUVs(0,uv); surface.SetTriangles(indices,0); surface.RecalculateNormals(); surface.RecalculateBounds();
+            MeshObject("Reservoir water — no collision lid",root,surface,p.water,false);
+            var lowerPoints = new List<Vector3>(points.Count);
+            foreach (var point in points) lowerPoints.Add(new Vector3(point.x,WaterTowerAccess.BottomSurfaceHeight,point.z));
+            var lowerIndices = new List<int>(indices.Count);
+            for (int i = 0; i < indices.Count; i += 3)
+                lowerIndices.AddRange(new[] { indices[i],indices[i+2],indices[i+1] });
+            var lowerSurface = new Mesh { name = "Water tower inverted lower surface" };
+            lowerSurface.SetVertices(lowerPoints); lowerSurface.SetUVs(0,uv); lowerSurface.SetTriangles(lowerIndices,0);
+            lowerSurface.RecalculateNormals(); lowerSurface.RecalculateBounds();
+            MeshObject("Water tower inverted lower water — no collision",root,lowerSurface,p.waterUnder,false);
+            root.gameObject.AddComponent<WaterTowerAccess>();
+        }
+
+        private static void TowerRing(Transform root, string name, float inner, float outer, float bottom, float top, Material material)
+        {
+            var vertices = new List<Vector3>(); var indices = new List<int>();
+            const int segments = 40;
+            for (int i = 0; i < segments; i++)
+            {
+                float a = i*Mathf.PI*2/segments, b = (i+1)*Mathf.PI*2/segments;
+                Vector3 ia = new Vector3(Mathf.Cos(a)*inner,bottom,Mathf.Sin(a)*inner);
+                Vector3 ib = new Vector3(Mathf.Cos(b)*inner,bottom,Mathf.Sin(b)*inner);
+                Vector3 oa = new Vector3(Mathf.Cos(a)*outer,bottom,Mathf.Sin(a)*outer);
+                Vector3 ob = new Vector3(Mathf.Cos(b)*outer,bottom,Mathf.Sin(b)*outer);
+                Vector3 up = Vector3.up*(top-bottom);
+                AddQuad(vertices,indices,oa,oa+up,ob+up,ob);
+                AddQuad(vertices,indices,ib,ib+up,ia+up,ia);
+                AddQuad(vertices,indices,ia+up,ib+up,ob+up,oa+up);
+                AddQuad(vertices,indices,oa,ob,ib,ia);
+            }
+            var mesh = new Mesh { name = name }; mesh.SetVertices(vertices); mesh.SetTriangles(indices,0);
+            mesh.RecalculateNormals(); mesh.RecalculateBounds(); MeshObject(name,root,mesh,material,true);
+        }
+
+        private static void AddQuad(List<Vector3> vertices, List<int> triangles, Vector3 a, Vector3 b, Vector3 c, Vector3 d)
+        {
+            int index = vertices.Count; vertices.AddRange(new[] { a,b,c,d });
+            triangles.AddRange(new[] { index,index+1,index+2,index,index+2,index+3 });
         }
 
         private static void Turbine(Transform root, WorldPalette p)

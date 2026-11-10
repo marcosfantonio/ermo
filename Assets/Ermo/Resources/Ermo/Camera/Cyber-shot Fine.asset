@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be43001abcaa461092bb36a5c0e90001, type: 3}
+  m_Name: Cyber-shot Fine
+  m_EditorClassIdentifier:
+  preset: 0
+  captureHeight: 480
+  fourThree: 1
+  pointUpscale: 0
+  limitCaptureCadence: 0
+  captureFps: 30
+  luminanceNoise: 0.009
+  chromaNoise: 0.003
+  sharpening: 0.5
+  centerSoftness: 0.08
+  edgeSoftness: 0.22
+  saturation: 1.12
+  contrast: 1.07
+  whiteClip: 0.98
+  bloom: 0.08
+  compression: 0.32
+  flatQuantization: 0.007
+  detailQuantization: 0.016
+  chromaSubsampling: 0.8
+  temporalDetailLoss: 0.07
+  barrelDistortion: 0.035
+  chromaticPixels: 0.2
+  vignette: 0.035
+  autoExposure: 1
+  middleGray: 0.24
+  exposureCompensation: 0.18
+  exposureLimits: {x: -2, y: 2.5}
+  brightAdaptation: 0.7
+  darkAdaptation: 0.95
+  meterInterval: 0.12
+  autoWhiteBalance: 1
+  whiteBalanceStrength: 0.18
+  whiteBalanceAdaptation: 1.8
+  motionBlur: 1
+  motionBlurIntensity: 0.5
+  shutterSeconds: 0.016666667
+  maximumBlur: 0.012
+  enableAutofocus: 0
+  focusDistance: 12
+  minimumFocusDistance: 0.4
+  focusAdaptationSpeed: 3
+  maximumFocusBlur: 0.35
+  focusMask:
+    serializedVersion: 2
+    m_Bits: 4294967291
+  handheld:
+    intensity: 0.85
+    breathingHz: 0.22
+    breathingMeters: 0.004
+    posturalMeters: 0.003
+    posturalDegrees: 0.12
+    tremorDegrees: 0.025
+    tremorHz: 6
+    adjustmentInterval: {x: 12, y: 25}
+    adjustmentDegrees: 0.2
+    walkBobMeters: 0.012
+    walkRollDegrees: 0.3
+    mouseInertia: 0.003
+    maximumInertiaDegrees: 0.35
+    dampingSeconds: 0.12

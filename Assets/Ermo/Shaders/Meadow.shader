@@ -5,10 +5,16 @@ Shader "Ermo/Meadow"
         _BaseColor ("Color", Color) = (1,1,1,1)
         _Grass ("Grass texture", Float) = 0
         _Road ("Chalk texture", Float) = 0
-        _MainTex ("Godot grain", 2D) = "white" {}
+        _MainTex ("Surface texture", 2D) = "white" {}
         _TextureScale ("Texture scale", Float) = 1
         _Wobble ("Subpixel vertex snap", Range(0,1)) = 0
         _Cull ("Cull", Float) = 2
+        [HideInInspector] _ErmoInteriorEnabled ("Room lighting", Float) = 0
+        [HideInInspector] _ErmoInteriorRoof ("Interior roof", Float) = 0
+        [HideInInspector] _ErmoInteriorMin ("Room minimum", Vector) = (0,0,0,0)
+        [HideInInspector] _ErmoInteriorMax ("Room maximum", Vector) = (0,0,0,0)
+        [HideInInspector] _ErmoInteriorCeiling ("Pitched room ceiling", Vector) = (0,0,0,0)
+        [HideInInspector] _ErmoPortalCount ("Room openings", Integer) = 0
     }
     SubShader
     {
@@ -35,7 +41,17 @@ Shader "Ermo/Meadow"
                 float _Road;
                 float _TextureScale;
                 float _Wobble;
+                float _ErmoInteriorEnabled;
+                float _ErmoInteriorRoof;
+                float4 _ErmoInteriorMin;
+                float4 _ErmoInteriorMax;
+                float4 _ErmoInteriorCeiling;
+                float4x4 _ErmoInteriorWorldToLocal;
+                int _ErmoPortalCount;
+                float4 _ErmoPortalMin[8];
+                float4 _ErmoPortalMax[8];
             CBUFFER_END
+            #include "HouseInterior.hlsl"
             Varyings Vert(Attributes input)
             {
                 Varyings output;
@@ -55,9 +71,11 @@ Shader "Ermo/Meadow"
             {
                 Light sun = GetMainLight(TransformWorldToShadowCoord(input.world));
                 half diffuse = saturate(dot(normalize(input.normal), sun.direction));
-                // Stylized ambient keeps shaded hills luminous rather than photorealistically dark.
-                half3 ambient = lerp(half3(.2,.3,.4),_ErmoAmbientColor.rgb,_ErmoAmbientColor.a);
-                half3 lighting = ambient + sun.color * diffuse * sun.shadowAttenuation;
+                // Keep blue fill subtle, with deeper cast shadows and unchanged direct sunlight.
+                half3 ambient = lerp(half3(.035,.065,.12),_ErmoAmbientColor.rgb,_ErmoAmbientColor.a);
+                ambient *= lerp(.45, 1.0, sun.shadowAttenuation);
+                float3 roomLighting = ErmoRoomLighting(input.world, normalize(input.normal), sun.direction);
+                half3 lighting = ambient * roomLighting.x + sun.color * diffuse * sun.shadowAttenuation * roomLighting.y;
                 half3 color = _BaseColor.rgb * input.color.rgb;
                 half3 detail = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,input.uv*_TextureScale).rgb;
                 if (_ErmoFoundFootage > .5 && _Grass > .5)
@@ -67,11 +85,22 @@ Shader "Ermo/Meadow"
                 float textureStrength = lerp(.4,.2,saturate(_ErmoFoundFootage));
                 half3 textured = lerp(detail,lerp(half3(1,1,1),detail*1.65,textureStrength)*(1+patches*.07),_Grass);
                 color *= textured;
+                // Keep a saturated meadow without pre-clipping the green channel;
+                // camera color response supplies the nostalgic color, not neon paint.
+                if (_Grass > .5)
+                {
+                    half3 greenTint = color * half3(.94, 1.1, .82);
+                    color = lerp(color, greenTint, .55);
+                }
                 color *= lighting;
-                return half4(ErmoAtmosphere(color, input.world, _WorldSpaceCameraPos, _Time.y), 1);
+                // Outdoor distance haze must not add sky-colored light to a sealed room.
+                if (roomLighting.z < .5)
+                    color = ErmoAtmosphere(color, input.world, _WorldSpaceCameraPos, _Time.y);
+                return half4(color, 1);
             }
             ENDHLSL
         }
         UsePass "Universal Render Pipeline/Lit/ShadowCaster"
+        UsePass "Universal Render Pipeline/Lit/MotionVectors"
     }
 }

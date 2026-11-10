@@ -21,11 +21,13 @@ Shader "Ermo/Dream Sky"
                 // Direct port of godot/ermo/shaders/sky.gdshader.
                 float3 ray = normalize(input.direction);
                 float height = max(ray.y,0);
-                float3 blue = lerp(float3(.15,.50,.76),float3(.025,.29,.65),smoothstep(0,.65,height));
+                // Linear-light summer blue. The former display-like RGB values
+                // became pale turquoise after the linear -> sRGB output transform.
+                float3 blue = lerp(float3(.055,.32,.68),float3(.018,.13,.46),smoothstep(.02,.72,height));
                 float2 plane = ray.xz/max(ray.y,.06);
                 float clouds = ErmoNoise(plane*float2(1.4,5))* .8 + ErmoNoise(plane*10)*.2;
                 float mask = smoothstep(.79,.88,clouds)*smoothstep(.26,.45,height);
-                float3 color = lerp(blue,float3(.92,.92,.80),mask*.85);
+                float3 color = lerp(blue,float3(.96,.96,.88),mask*.9);
                 if (_ErmoFogStyle > .5) color = lerp(color,_ErmoHazeColor.rgb*_ErmoGodotFog.z,_ErmoGodotFog.w);
                 else color = lerp(color,_ErmoHazeColor.rgb,pow(1-saturate(height),45));
                 return half4(color,1);

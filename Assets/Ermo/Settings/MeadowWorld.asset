@@ -50,16 +50,18 @@ MonoBehaviour:
   houseChance: 0.8
   waterTowerChance: 0.3
   turbineChance: 0.12
-  renderHeight: 540
+  cameraProfile: {fileID: 11400000, guid: be43001abcaa461092bb36a5c0e90012, type: 2}
+  renderHeight: 480
+  captureFourThree: 1
   godotPixelGrid: 0
-  pixelatedUpscale: 1
-  fieldOfView: 73
+  pixelatedUpscale: 0
+  fieldOfView: 58
   lensDistortion: 0.042
   headBob: 1
   walkSwayFrequency: 0.68
   runSwayFrequency: 1
   swaySmoothing: 0.16
-  hazeColor: {r: 0.69, g: 0.80, b: 0.85, a: 1}
+  hazeColor: {r: 0.53, g: 0.72, b: 0.89, a: 1}
   fogStartFraction: 0.85
   fogFullFraction: 0.995
   fogOpticalDepth: 3.8
@@ -73,15 +75,19 @@ MonoBehaviour:
   woodTexture: {fileID: 2800000, guid: 1838eb76331b4522b7d5c68fdf0d8235, type: 3}
   vertexWobble: 0.035
   filmGrain: 0.014
-  vignette: 0.18
+  vignette: 0.045
   chromatic: 0.3
-  dither: 0.08
+  dither: 0
   foundFootage: 1
-  captureSoftness: 0.22
-  captureSaturation: 1.22
-  captureContrast: 1.05
-  captureInstability: 0.16
-  analogArtifacts: 0.32
+  captureSoftness: 0.24
+  captureSaturation: 1.16
+  captureContrast: 1.13
+  captureExposure: 0.35
+  captureSharpness: 0.65
+  captureBloom: 0.12
+  digitalCompression: 0.38
+  captureInstability: 0
+  analogArtifacts: 0
   legacyVhs: 0
   tapeStrength: 0.7
   tapeSaturation: 1.45

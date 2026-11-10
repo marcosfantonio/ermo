@@ -15,6 +15,7 @@ namespace Ermo
         private Vector3 previousPosition;
         private System.Random variation;
         private bool leftFoot;
+        private bool indoors;
 
         public void Initialize(FirstPersonWalker player, ProceduralWorld proceduralWorld, WorldSettings config)
         {
@@ -33,8 +34,15 @@ namespace Ermo
         private void LateUpdate()
         {
             if (settings == null) return;
+            bool underHouseRoof = IsUnderHouseRoof();
+            if (underHouseRoof != indoors)
+            {
+                indoors = underHouseRoof;
+                if (indoors) Breeze.Stop();
+                else if (Breeze.clip != null) Breeze.Play();
+            }
             float gust = .78f+Mathf.PerlinNoise(Time.time*.07f,29.1f)*.34f;
-            Breeze.volume = settings.audioVolume*settings.breezeVolume*gust;
+            Breeze.volume = settings.audioVolume*settings.breezeVolume*1.3f*gust;
             Vector3 delta = transform.position-previousPosition; previousPosition = transform.position;
             float distance = new Vector2(delta.x,delta.z).magnitude;
             if (walker.MenuOpen && Footsteps.isPlaying) Footsteps.Stop();
@@ -46,6 +54,25 @@ namespace Ermo
             Footsteps.pitch = .95f+(float)variation.NextDouble()*.1f+(walker.IsRunning ? .04f : 0);
             float gain = settings.audioVolume*settings.footstepVolume*(walker.IsRunning ? 1.18f : .85f);
             Footsteps.PlayOneShot(clip,gain*(.92f+(float)variation.NextDouble()*.16f));
+        }
+
+        private bool IsUnderHouseRoof()
+        {
+            Vector3 origin = transform.position + Vector3.up*.35f;
+            bool previousBackfaces = Physics.queriesHitBackfaces;
+            try
+            {
+                Physics.queriesHitBackfaces = true;
+                foreach (var hit in Physics.RaycastAll(origin,Vector3.up,12f,
+                    Physics.DefaultRaycastLayers,QueryTriggerInteraction.Ignore))
+                {
+                    string name = hit.collider.name.ToLowerInvariant();
+                    if (name == "roof" || name.Contains("house_teto") || name.Contains("casa_teto"))
+                        return true;
+                }
+                return false;
+            }
+            finally { Physics.queriesHitBackfaces = previousBackfaces; }
         }
 
         private AudioClip SurfaceClip()

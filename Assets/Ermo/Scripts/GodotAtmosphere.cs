@@ -8,7 +8,7 @@ namespace Ermo
         {
             float range = settings.chunkSize*settings.viewDistance;
             bool reference = settings.fogStyle == FogStyle.GodotExponential;
-            Color tint = reference ? new Color(.35f,.64f,.82f) : settings.hazeColor;
+            Color tint = reference ? new Color(.53f,.72f,.89f) : settings.hazeColor;
             float start = range*settings.fogStartFraction;
             float end = Mathf.Max(start+1,range*settings.fogFullFraction);
             if (updateSceneEnvironment)
@@ -25,7 +25,7 @@ namespace Ermo
             Shader.SetGlobalFloat("_ErmoHazeHeight",settings.hillHeight*1.15f);
             Shader.SetGlobalFloat("_ErmoFogStyle",reference ? 1 : 0);
             Shader.SetGlobalVector("_ErmoGodotFog",new Vector4(settings.godotFogDensity,settings.fogAerialPerspective,.65f,.04f));
-            Color ambient = new Color(.48f,.68f,.92f).linear*.5f; ambient.a = 1;
+            Color ambient = new Color(.48f,.68f,.92f).linear*.18f; ambient.a = 1;
             Shader.SetGlobalColor("_ErmoAmbientColor",ambient);
             Shader.SetGlobalFloat("_ErmoFoundFootage",settings.foundFootage ? 1 : 0);
         }
