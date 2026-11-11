@@ -221,6 +221,8 @@ namespace Ermo.Editor
                 }
                 if (passage.gameObject.scene.path != WaterWorld.ScenePath || world.gameObject.activeInHierarchy || player.TraversalActive || passage.Immersion != 0)
                     throw new InvalidOperationException("Player/capture rig scene transfer or source-world suspension failed.");
+                if (WaterWorld.Instance.Seed != world.Settings.seed || !WaterWorld.Instance.IsWater(player.transform.position))
+                    throw new InvalidOperationException("Balneario must match the source seed and emerge inside its main pool.");
                 if (passage.Effects.Exits != 1 || passage.Effects.Wetness < .5f)
                     throw new InvalidOperationException("Emergence must play one exit splash and leave a wet lens.");
                 if (UnityEngine.Object.FindObjectsByType<FirstPersonWalker>(FindObjectsSortMode.None).Length != 1)

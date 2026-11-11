@@ -10,7 +10,7 @@ Uma estrada de terra corta morros verdes. Casas com alpendre aparecem pelo camin
 
 Observe o lugar. Explore as casas e os caminhos. Preste atenção ao que parece fora do lugar e descubra se existe uma passagem para outro canto desse mundo. A história não entrega todas as respostas: as pistas e as contradições fazem parte do mistério.
 
-**No protótipo atual**, você pode caminhar livremente pelos Sítios, explorar as casas e encontrar caixas-d'água que escondem uma passagem. Ainda não há missões, combate, inventário ou final — por enquanto, o objetivo é explorar e descobrir o que o lugar guarda.
+**No protótipo atual**, você pode caminhar livremente pelos Sítios, explorar as casas e encontrar caixas-d'água que escondem uma passagem para um **balneário procedural contínuo**. Do outro lado, você emerge dentro de uma piscina e o parque aquático continua sendo gerado conforme você explora, sem cercamento externo. Ainda não há missões, combate, inventário ou final — por enquanto, o objetivo é explorar e descobrir o que o lugar guarda.
 
 ## Controles
 

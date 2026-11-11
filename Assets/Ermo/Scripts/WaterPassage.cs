@@ -34,6 +34,7 @@ namespace Ermo
             Effects = gameObject.AddComponent<WaterImmersionEffects>(); Effects.Initialize(settings);
             previousHead = player.View.transform.position;
             previousWaterPosition = player.transform.position;
+            WaterWorld.RequestSeed(settings.seed);
             if (WaterWorld.Instance == null && (preload == null || preload.isDone))
                 preload = SceneManager.LoadSceneAsync(WaterWorld.ScenePath,LoadSceneMode.Additive);
         }
@@ -50,7 +51,12 @@ namespace Ermo
             }
             if (State == PassageState.Climbing) { TickLadder(); return; }
             if (State == PassageState.Diving || State == PassageState.Emerging) { TickCrossing(); return; }
-            if (State == PassageState.WaterWorld) { TickWaterSteps(); return; }
+            if (State == PassageState.WaterWorld)
+            {
+                if (!walker.TraversalActive && WaterWorld.Instance != null)
+                    SetSlideImmersion(WaterWorld.Instance.IsWater(walker.View.transform.position));
+                TickWaterSteps(); return;
+            }
             candidate = null;
             foreach (var tower in WaterTowerAccess.Live)
             {
@@ -66,16 +72,26 @@ namespace Ermo
 
         private void TickWaterSteps()
         {
+            if (walker.TraversalActive) { previousWaterPosition = walker.transform.position; waterStepDistance = 0; return; }
             Vector3 position = walker.transform.position;
             float distance = Vector2.Distance(new Vector2(position.x,position.z),
                 new Vector2(previousWaterPosition.x,previousWaterPosition.z));
             previousWaterPosition = position;
-            if (!walker.Grounded || walker.MenuOpen) { waterStepDistance = 0; return; }
+            if (distance > 10) { waterStepDistance = 0; return; } // floating-origin shift, not a stride
+            if (!walker.Grounded || walker.MenuOpen || WaterWorld.Instance == null || !WaterWorld.Instance.IsWater(position))
+            { waterStepDistance = 0; return; }
             waterStepDistance += distance;
             float cadence = walker.IsRunning ? 1.25f : .9f;
             if (waterStepDistance < cadence) return;
             waterStepDistance %= cadence;
             Effects.PlayWaterStep(walker.IsRunning);
+        }
+
+        public void SetSlideImmersion(bool submerged)
+        {
+            if (submerged && Immersion < .5f) Effects.Enter();
+            if (!submerged && Immersion >= .5f) Effects.Emerge();
+            Immersion = submerged ? 1 : 0;
         }
 
         private void LateUpdate() { if (walker != null) previousHead = walker.View.transform.position; }
@@ -188,9 +204,10 @@ namespace Ermo
             sourceEnvironment.SetActive(false);
             SceneManager.SetActiveScene(destination.gameObject.scene);
             destination.ActivateEnvironment();
+            destination.Follow(walker.transform);
             var rural = walker.GetComponent<RuralAudio>();
             if (rural != null) { rural.Breeze.Stop(); rural.Footsteps.Stop(); rural.enabled = false; }
-            destinationDeep = destination.transform.position+Vector3.down*4;
+            destinationDeep = destination.Arrival+Vector3.down*3.45f;
             previousWaterPosition = destinationDeep;
             waterStepDistance = 0;
             walker.transform.rotation = Quaternion.Euler(0,sourceYaw,0);

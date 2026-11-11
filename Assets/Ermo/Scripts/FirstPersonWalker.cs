@@ -109,6 +109,14 @@ namespace Ermo
             if (TraversalActive || deltaTime <= 0 || controller == null || !controller.enabled) return;
             if (controller.isGrounded && fallSpeed < 0) fallSpeed = -2;
             fallSpeed = Mathf.Max(fallSpeed-Gravity*deltaTime,-35);
+            // Deep runout pools support the player at swimming height; shallow pools
+            // retain walking physics. Traversals still own the deliberate dive.
+            if (WaterWorld.Instance != null && WaterWorld.Instance.TryGetPoolWater(transform.position,out float surface,out float floor) &&
+                surface-floor > 1.7f && transform.position.y < surface-1)
+            {
+                float buoyancy = Mathf.Clamp((surface-1.25f-transform.position.y)*3,-2,2.8f);
+                fallSpeed = controller.isGrounded && buoyancy > 0 ? buoyancy : Mathf.MoveTowards(fallSpeed,buoyancy,deltaTime*45);
+            }
             var flags = controller.Move((planarVelocity+Vector3.up*fallSpeed)*deltaTime);
             if ((flags & CollisionFlags.Above) != 0 && fallSpeed > 0) fallSpeed = 0;
         }
@@ -135,10 +143,18 @@ namespace Ermo
             ViewOrientation.localRotation = Quaternion.Euler(pitch,0,roll);
         }
 
+        public void SetSlidePose(Vector3 position, float heading, float lookPitch, float eyeHeight)
+        {
+            yaw = heading; transform.rotation = Quaternion.Euler(0,yaw,0);
+            SetTraversalPose(position,lookPitch,0);
+            ViewOrientation.localPosition = Vector3.up*eyeHeight;
+        }
+
         public void EndTraversal(bool jump = false)
         {
             TraversalActive = TraversalLocksLook = false; traversalRoll = 0;
             fallSpeed = jump ? Mathf.Sqrt(2*Gravity*jumpHeight) : -2;
+            ViewOrientation.localPosition = Vector3.up*1.65f;
             ViewOrientation.localRotation = Quaternion.Euler(pitch,0,0);
         }
 

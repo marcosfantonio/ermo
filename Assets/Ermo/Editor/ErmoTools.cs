@@ -96,13 +96,14 @@ namespace Ermo.Editor
             Require(settings.chunkSize == size, "World manifest did not restore terrain parameters");
             Require(AssetDatabase.LoadAssetAtPath<SceneAsset>(WaterWorld.ScenePath) != null,"Missing water destination scene.");
             Require(Array.Exists(EditorBuildSettings.scenes,s => s.enabled && s.path == WaterWorld.ScenePath),"Water destination must be included in builds.");
-            foreach (string name in new[] { "Ermo/Meadow", "Ermo/Dream Sky", "Ermo/Pixel Lens", "Ermo/Deep Water", "Ermo/Reservoir Water", "Ermo/Other Side Sky" })
+            foreach (string name in new[] { "Ermo/Meadow", "Ermo/Dream Sky", "Ermo/Pixel Lens", "Ermo/Deep Water", "Ermo/Reservoir Water", "Ermo/Other Side Sky", "Ermo/Pool Water", "Ermo/Balneario Surface" })
             {
                 var shader = Shader.Find(name);
                 Require(shader != null, "Missing shader " + name);
                 foreach (var message in ShaderUtil.GetShaderMessages(shader))
                     Require(message.severity != UnityEditor.Rendering.ShaderCompilerMessageSeverity.Error, name + ": " + message.message);
             }
+            BalnearioValidation.ValidateLayout();
             var palette = new WorldPalette(Shader.Find("Ermo/Meadow"));
             var parent = new GameObject("Ermo seam validation");
             try

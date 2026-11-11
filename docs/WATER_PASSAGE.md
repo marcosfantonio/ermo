@@ -8,7 +8,7 @@
 4. Entre ou pule na abertura central. A passagem começa quando a cabeça atravessa a água em queda, não ao simplesmente se aproximar da torre.
 5. O mergulho continua, a câmera se inverte sob a água e emerge de pé do outro lado. WASD, mouse e salto voltam a funcionar normalmente.
 
-O destino inicial é **`Assets/Ermo/Scenes/Balneario.unity`**: somente água e céu, sem costa ou construções. Há um piso de colisão submerso e invisível para o jogador poder emergir e explorar em pé. Voltar a uma seed pelo menu recria **Sitios**; ainda não há passagem de retorno pela água.
+O destino é **`Assets/Ermo/Scenes/Balneario.unity`**: um parque aquático procedural contínuo, com streaming de setores, piscinas variadas, jardins, mobiliário e atrações, sem limite externo cercado. O jogador emerge obrigatoriamente no centro livre da piscina principal, sobre um fundo raso com colisão. A trajetória e a animação de emersão permanecem iguais. Veja [BALNEARIO.md](BALNEARIO.md) para referências e regras de distribuição. Voltar a uma seed pelo menu recria **Sitios** e prepara novamente a chegada do balneário correspondente; ainda não há passagem de retorno pela água.
 
 ## Integração
 
@@ -23,7 +23,7 @@ O destino inicial é **`Assets/Ermo/Scenes/Balneario.unity`**: somente água e c
 
 ## Aparência e transição
 
-`Resources/Ermo/Water/ReservoirWater.shader` é exclusivo do reservatório. O mar usa `Water.shader` e `WaterSky.hlsl`, restaurados à versão anterior aos ajustes de transparência/poço; mudanças ópticas do reservatório não alteram mais o destino. A referência visual do reservatório é `agua.png`: um poço de água escura e reflexiva que termina numa abertura para o céu, não dois discos azuis ou água praticamente invisível.
+`Resources/Ermo/Water/ReservoirWater.shader` é exclusivo do reservatório. As piscinas usam `PoolWater.shader`, com o modelo óptico escuro/reflexivo do antigo Water Level (`Water.shader`), sem mosaico pintado na superfície; o shader original é preservado. Mudanças ópticas do reservatório não alteram o balneário. A referência visual do reservatório é `agua.png`: um poço de água escura e reflexiva que termina numa abertura para o céu, não dois discos azuis ou água praticamente invisível.
 
 No reservatório, `_WellDepth` ativa um volume óptico cilíndrico de 7,5 unidades locais: o shader refrata o raio da câmera na entrada, calcula interseções e reflexões nas paredes aquáticas e mostra o céu invertido na extremidade inferior. Absorção por distância escurece o interior e pequenas ondulações quebram os reflexos. A superfície compõe transmissão e reflexão num pixel opaco: água cristalina não é simulada simplesmente reduzindo alpha. A profundidade óptica é virtual, contida na abertura para não expor o piso/plataforma da torre ou atravessar o terreno. A segunda superfície física invertida continua sendo usada na travessia; sua distância física é menor que a profundidade óptica impossível vista de cima.
 
@@ -35,7 +35,7 @@ A inversão é uma coreografia local da câmera e da trajetória vertical entre 
 
 ### Limites do protótipo
 
-- Reflexão procedural de céu, não SSR ou reflexão planar de objetos. No destino atual só existem céu e água, portanto não há construções a refletir.
+- O reservatório mantém reflexão procedural de céu. As piscinas do balneário usam também captura cúbica HDR local das construções, atualizada periodicamente; não é SSR nem reflexão planar.
 - O volume óptico calcula refração/reflexões de um cilindro procedural, não de objetos arbitrários submersos; não é simulação de fluido nem natação livre.
 - A continuidade usa a região submersa opaca para esconder o remapeamento entre cenas; não é um portal geométrico que permite ver o outro mundo através de uma abertura transparente.
 - Não há retorno ao reservatório pelo mundo de água nesta primeira versão.

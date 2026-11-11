@@ -113,7 +113,7 @@ namespace Ermo
             GUI.matrix = Matrix4x4.Scale(Vector3.one * scale);
             float width = Screen.width / scale, height = Screen.height / scale;
             GUI.color = new Color(.94f, .97f, .83f, .9f);
-            if (showInfo && !walker.MenuOpen)
+            if (showInfo && !walker.MenuOpen && !(walker.GetComponent<WaterPassage>()?.InWaterWorld ?? false))
             {
                 if (Time.unscaledTime - startedAt < 14)
                     GUI.Label(new Rect(28, height - 62, 650, 48), "WASD  caminhar    SHIFT  correr    ESPAÇO  pular    MOUSE  olhar\nESC / F1  opções    H  interface", small);
