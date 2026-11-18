@@ -1,0 +1,1329 @@
+{
+  "assets": [
+    {
+      "file": "piso_concreto",
+      "prefab": "Piso",
+      "folder": "Arquitetura",
+      "materials": [
+        "Concreto"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            -0.04,
+            0
+          ],
+          "size": [
+            4,
+            0.08,
+            4
+          ]
+        }
+      ],
+      "triangles": 12,
+      "min": [
+        -2.0,
+        -0.08,
+        -2.0
+      ],
+      "max": [
+        2.0,
+        0.0,
+        2.0
+      ],
+      "size": [
+        4.0,
+        0.08,
+        4.0
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "forro",
+      "prefab": "Forro",
+      "folder": "Arquitetura",
+      "materials": [
+        "Forro"
+      ],
+      "pivot": [
+        0,
+        5.5,
+        0
+      ],
+      "colliders": [],
+      "triangles": 12,
+      "min": [
+        -2.0,
+        5.5,
+        -2.0
+      ],
+      "max": [
+        2.0,
+        5.58,
+        2.0
+      ],
+      "size": [
+        4.0,
+        0.08,
+        4.0
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "luminaria",
+      "prefab": "Luminaria",
+      "folder": "Arquitetura",
+      "materials": [
+        "Luz",
+        "Tubo"
+      ],
+      "pivot": [
+        0,
+        5.5,
+        0
+      ],
+      "colliders": [],
+      "triangles": 72,
+      "min": [
+        -0.6,
+        5.38,
+        -0.15
+      ],
+      "max": [
+        0.6,
+        5.5,
+        0.15
+      ],
+      "size": [
+        1.2,
+        0.12,
+        0.3
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "pilar",
+      "prefab": "Pilar",
+      "folder": "Arquitetura",
+      "materials": [
+        "Concreto"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            2.75,
+            0
+          ],
+          "size": [
+            0.4,
+            5.5,
+            0.4
+          ]
+        }
+      ],
+      "triangles": 12,
+      "min": [
+        -0.2,
+        0.0,
+        -0.2
+      ],
+      "max": [
+        0.2,
+        5.5,
+        0.2
+      ],
+      "size": [
+        0.4,
+        5.5,
+        0.4
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "gondola",
+      "prefab": "Gondola",
+      "folder": "Estacoes",
+      "materials": [
+        "Gondola",
+        "Bandeja"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            1.1,
+            0
+          ],
+          "size": [
+            1.2,
+            2.2,
+            2
+          ]
+        }
+      ],
+      "triangles": 72,
+      "min": [
+        -0.6,
+        0.0,
+        -1.0
+      ],
+      "max": [
+        0.6,
+        2.2,
+        1.0
+      ],
+      "size": [
+        1.2,
+        2.2,
+        2.0
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "bandeja",
+      "prefab": "Bandeja",
+      "folder": "Props",
+      "materials": [
+        "Bandeja"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [],
+      "triangles": 24,
+      "min": [
+        -0.55,
+        0.0,
+        -1.0
+      ],
+      "max": [
+        0.55,
+        0.04,
+        1.0
+      ],
+      "size": [
+        1.1,
+        0.04,
+        2.0
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "testeira",
+      "prefab": "Testeira",
+      "folder": "Estacoes",
+      "materials": [
+        "Gondola",
+        "Bandeja"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            1.1,
+            0
+          ],
+          "size": [
+            1.2,
+            2.2,
+            0.15
+          ]
+        }
+      ],
+      "triangles": 72,
+      "min": [
+        -0.6,
+        0.0,
+        -0.075
+      ],
+      "max": [
+        0.6,
+        2.2,
+        0.075
+      ],
+      "size": [
+        1.2,
+        2.2,
+        0.15
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "palete",
+      "prefab": "Palete",
+      "folder": "Props",
+      "materials": [
+        "Madeira"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            0.07,
+            0
+          ],
+          "size": [
+            1.2,
+            0.14,
+            1
+          ]
+        }
+      ],
+      "triangles": 96,
+      "min": [
+        -0.6,
+        0.0,
+        -0.5
+      ],
+      "max": [
+        0.6,
+        0.14,
+        0.5
+      ],
+      "size": [
+        1.2,
+        0.14,
+        1.0
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "caixa_papelao",
+      "prefab": "CaixaPapelao",
+      "folder": "Props",
+      "materials": [
+        "Papelao",
+        "PapelaoTampa"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            0.2,
+            0
+          ],
+          "size": [
+            0.6,
+            0.4,
+            0.45
+          ]
+        }
+      ],
+      "triangles": 24,
+      "min": [
+        -0.3,
+        0.0,
+        -0.225
+      ],
+      "max": [
+        0.3,
+        0.4,
+        0.225
+      ],
+      "size": [
+        0.6,
+        0.4,
+        0.45
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "porta_palete",
+      "prefab": "PortaPalete",
+      "folder": "Estacoes",
+      "materials": [
+        "Metal"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            2.1,
+            0
+          ],
+          "size": [
+            1.1,
+            4.2,
+            2.2
+          ]
+        }
+      ],
+      "triangles": 192,
+      "min": [
+        -0.55,
+        0.0,
+        -1.1
+      ],
+      "max": [
+        0.55,
+        4.2,
+        1.1
+      ],
+      "size": [
+        1.1,
+        4.2,
+        2.2
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "fardo",
+      "prefab": "Fardo",
+      "folder": "Props",
+      "materials": [
+        "Fardo",
+        "Faixa"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            0.175,
+            0
+          ],
+          "size": [
+            0.5,
+            0.35,
+            0.3
+          ]
+        }
+      ],
+      "triangles": 36,
+      "min": [
+        -0.25,
+        0.0,
+        -0.15
+      ],
+      "max": [
+        0.25,
+        0.35,
+        0.15
+      ],
+      "size": [
+        0.5,
+        0.35,
+        0.3
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "cartucho",
+      "prefab": "Cartucho",
+      "folder": "Props",
+      "materials": [
+        "Cartucho",
+        "CartuchoTopo"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            0.15,
+            0
+          ],
+          "size": [
+            0.25,
+            0.3,
+            0.12
+          ]
+        }
+      ],
+      "triangles": 24,
+      "min": [
+        -0.125,
+        0.0,
+        -0.06
+      ],
+      "max": [
+        0.125,
+        0.3,
+        0.06
+      ],
+      "size": [
+        0.25,
+        0.3,
+        0.12
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "garrafao",
+      "prefab": "Garrafao",
+      "folder": "Props",
+      "materials": [
+        "Garrafao",
+        "Tampa"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            0.2,
+            0
+          ],
+          "size": [
+            0.25,
+            0.4,
+            0.25
+          ]
+        }
+      ],
+      "triangles": 124,
+      "min": [
+        -0.125,
+        0.0,
+        -0.125
+      ],
+      "max": [
+        0.125,
+        0.4,
+        0.125
+      ],
+      "size": [
+        0.25,
+        0.4,
+        0.25
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "pacote",
+      "prefab": "Pacote",
+      "folder": "Props",
+      "materials": [
+        "Pacote",
+        "PacoteFaixa"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            0.075,
+            0
+          ],
+          "size": [
+            0.4,
+            0.15,
+            0.35
+          ]
+        }
+      ],
+      "triangles": 24,
+      "min": [
+        -0.2,
+        0.0,
+        -0.175
+      ],
+      "max": [
+        0.2,
+        0.15,
+        0.175
+      ],
+      "size": [
+        0.4,
+        0.15,
+        0.35
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "caixa_atendimento",
+      "prefab": "CaixaAtendimento",
+      "folder": "Estacoes",
+      "materials": [
+        "Atendimento",
+        "Registro"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            0.45,
+            0
+          ],
+          "size": [
+            0.8,
+            0.9,
+            1.6
+          ]
+        }
+      ],
+      "triangles": 60,
+      "min": [
+        -0.4,
+        0.0,
+        -0.8
+      ],
+      "max": [
+        0.4,
+        0.9,
+        0.8
+      ],
+      "size": [
+        0.8,
+        0.9,
+        1.6
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "portal_entrada",
+      "prefab": "PortalEntrada",
+      "folder": "Arquitetura",
+      "materials": [
+        "Portal"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            1.6,
+            -1.775
+          ],
+          "size": [
+            0.3,
+            3.2,
+            0.45
+          ]
+        },
+        {
+          "center": [
+            0,
+            1.6,
+            1.775
+          ],
+          "size": [
+            0.3,
+            3.2,
+            0.45
+          ]
+        }
+      ],
+      "triangles": 36,
+      "min": [
+        -0.15,
+        0.0,
+        -2.0
+      ],
+      "max": [
+        0.15,
+        3.2,
+        2.0
+      ],
+      "size": [
+        0.3,
+        3.2,
+        4.0
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "ilha_freezer",
+      "prefab": "IlhaFreezer",
+      "folder": "Estacoes",
+      "materials": [
+        "Freezer",
+        "Vidro"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            0.45,
+            0
+          ],
+          "size": [
+            1,
+            0.9,
+            2
+          ]
+        }
+      ],
+      "triangles": 72,
+      "min": [
+        -0.5,
+        0.0,
+        -1.0
+      ],
+      "max": [
+        0.5,
+        0.9,
+        1.0
+      ],
+      "size": [
+        1.0,
+        0.9,
+        2.0
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "freezer_vertical",
+      "prefab": "FreezerVertical",
+      "folder": "Estacoes",
+      "materials": [
+        "Freezer",
+        "Vidro"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            1,
+            0
+          ],
+          "size": [
+            0.75,
+            2,
+            1.2
+          ]
+        }
+      ],
+      "triangles": 120,
+      "min": [
+        -0.375,
+        0.0,
+        -0.6
+      ],
+      "max": [
+        0.375,
+        2.0,
+        0.6
+      ],
+      "size": [
+        0.75,
+        2.0,
+        1.2
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "parede",
+      "prefab": "Parede",
+      "folder": "Arquitetura",
+      "materials": [
+        "Parede",
+        "Rodape"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            2.75,
+            0
+          ],
+          "size": [
+            0.2,
+            5.5,
+            4
+          ]
+        }
+      ],
+      "triangles": 24,
+      "min": [
+        -0.1,
+        0.0,
+        -2.0
+      ],
+      "max": [
+        0.1,
+        5.5,
+        2.0
+      ],
+      "size": [
+        0.2,
+        5.5,
+        4.0
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "porta_camara",
+      "prefab": "PortaCamara",
+      "folder": "Arquitetura",
+      "materials": [
+        "Porta",
+        "Vidro"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            1.2,
+            0
+          ],
+          "size": [
+            0.2,
+            2.4,
+            1.6
+          ]
+        }
+      ],
+      "triangles": 84,
+      "min": [
+        -0.1,
+        0.0,
+        -0.8
+      ],
+      "max": [
+        0.1,
+        2.4,
+        0.8
+      ],
+      "size": [
+        0.2,
+        2.4,
+        1.6
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "placa_setor_13",
+      "prefab": "PlacaSetor13",
+      "folder": "Arquitetura",
+      "materials": [
+        "PlacaSetor",
+        "Digito"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [],
+      "triangles": 84,
+      "min": [
+        -0.025,
+        -0.2,
+        -0.6
+      ],
+      "max": [
+        0.025,
+        0.2,
+        0.6
+      ],
+      "size": [
+        0.05,
+        0.4,
+        1.2
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "porta_saida",
+      "prefab": "PortaSaida",
+      "folder": "Arquitetura",
+      "materials": [
+        "Porta"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [
+        {
+          "center": [
+            0,
+            1.2,
+            0
+          ],
+          "size": [
+            0.12,
+            2.4,
+            1.4
+          ]
+        }
+      ],
+      "triangles": 84,
+      "min": [
+        -0.06,
+        0.0,
+        -0.7
+      ],
+      "max": [
+        0.06,
+        2.4,
+        0.7
+      ],
+      "size": [
+        0.12,
+        2.4,
+        1.4
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "placa_corredor",
+      "prefab": "PlacaCorredor",
+      "folder": "Arquitetura",
+      "materials": [
+        "PlacaCorredor"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [],
+      "triangles": 72,
+      "min": [
+        -0.025,
+        -0.175,
+        -0.6
+      ],
+      "max": [
+        0.025,
+        0.175,
+        0.6
+      ],
+      "size": [
+        0.05,
+        0.35,
+        1.2
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "luminaria_morta",
+      "prefab": "LuminariaMorta",
+      "folder": "Arquitetura",
+      "materials": [
+        "Luz",
+        "TuboMorto"
+      ],
+      "pivot": [
+        0,
+        5.5,
+        0
+      ],
+      "colliders": [],
+      "triangles": 84,
+      "min": [
+        -0.6,
+        5.38,
+        -0.15
+      ],
+      "max": [
+        0.6,
+        5.5,
+        0.15
+      ],
+      "size": [
+        1.2,
+        0.12,
+        0.3
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "seta_corredor",
+      "prefab": "SetaCorredor",
+      "folder": "Arquitetura",
+      "materials": [
+        "VerdeSaida",
+        "LetraSaida",
+        "Metal"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [],
+      "triangles": 76,
+      "min": [
+        -0.032,
+        -0.25,
+        -0.35
+      ],
+      "max": [
+        0.032,
+        2.2,
+        0.35
+      ],
+      "size": [
+        0.064,
+        2.45,
+        0.7
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "placa_13",
+      "prefab": "Placa13",
+      "folder": "Arquitetura",
+      "materials": [
+        "Placa13Azul",
+        "LetraSaida",
+        "Metal"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [],
+      "triangles": 316,
+      "min": [
+        -0.032,
+        -0.25,
+        -0.75
+      ],
+      "max": [
+        0.032,
+        2.2,
+        0.75
+      ],
+      "size": [
+        0.064,
+        2.45,
+        1.5
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "placa_saida",
+      "prefab": "PlacaSaida",
+      "folder": "Arquitetura",
+      "materials": [
+        "Parede",
+        "VerdeSaida",
+        "LetraSaida"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [],
+      "triangles": 444,
+      "min": [
+        -0.1,
+        0.0,
+        -0.7
+      ],
+      "max": [
+        0.215,
+        3.1,
+        0.7
+      ],
+      "size": [
+        0.315,
+        3.1,
+        1.4
+      ],
+      "unit_scale_factor": 1.0
+    },
+    {
+      "file": "evaporador",
+      "prefab": "Evaporador",
+      "folder": "Estacoes",
+      "materials": [
+        "Freezer",
+        "Metal",
+        "Registro"
+      ],
+      "pivot": [
+        0,
+        0.0,
+        0
+      ],
+      "colliders": [],
+      "triangles": 180,
+      "min": [
+        -0.0,
+        -0.3,
+        -0.8
+      ],
+      "max": [
+        0.45,
+        0.3,
+        0.8
+      ],
+      "size": [
+        0.45,
+        0.6,
+        1.6
+      ],
+      "unit_scale_factor": 1.0
+    }
+  ],
+  "colors": {
+    "Concreto": "8A8478",
+    "Forro": "B7B2A6",
+    "Luz": "C8CBCF",
+    "Tubo": "E8F6D4",
+    "Gondola": "C4622D",
+    "Bandeja": "E6DECF",
+    "Madeira": "8C6B3E",
+    "Papelao": "B58962",
+    "PapelaoTampa": "8D6948",
+    "Metal": "5C636A",
+    "Fardo": "E7E1D6",
+    "Faixa": "2C4C86",
+    "Cartucho": "D4A24C",
+    "CartuchoTopo": "8C3A32",
+    "Garrafao": "2C6E9C",
+    "Tampa": "E6E4DE",
+    "Pacote": "C24E44",
+    "PacoteFaixa": "F2E6C4",
+    "Atendimento": "4A5560",
+    "Registro": "2A2E32",
+    "Portal": "2A2F34",
+    "Freezer": "E8E6E0",
+    "Vidro": "8EA0AA",
+    "Parede": "C8C2B4",
+    "Rodape": "6F6B64",
+    "Porta": "3C4450",
+    "PlacaSetor": "E0B33A",
+    "Digito": "16181A",
+    "PlacaCorredor": "1E6A58",
+    "TuboMorto": "5E615A",
+    "VerdeSaida": "1F7A45",
+    "LetraSaida": "F2F5EE",
+    "Placa13Azul": "2C5E8C"
+  },
+  "palette": [
+    {
+      "name": "Atendimento",
+      "hex": "4A5560"
+    },
+    {
+      "name": "Bandeja",
+      "hex": "E6DECF"
+    },
+    {
+      "name": "Cartucho",
+      "hex": "D4A24C"
+    },
+    {
+      "name": "CartuchoTopo",
+      "hex": "8C3A32"
+    },
+    {
+      "name": "Concreto",
+      "hex": "8A8478"
+    },
+    {
+      "name": "Digito",
+      "hex": "16181A"
+    },
+    {
+      "name": "Faixa",
+      "hex": "2C4C86"
+    },
+    {
+      "name": "Fardo",
+      "hex": "E7E1D6"
+    },
+    {
+      "name": "Forro",
+      "hex": "B7B2A6"
+    },
+    {
+      "name": "Freezer",
+      "hex": "E8E6E0"
+    },
+    {
+      "name": "Garrafao",
+      "hex": "2C6E9C"
+    },
+    {
+      "name": "Gondola",
+      "hex": "C4622D"
+    },
+    {
+      "name": "LetraSaida",
+      "hex": "F2F5EE"
+    },
+    {
+      "name": "Luz",
+      "hex": "C8CBCF"
+    },
+    {
+      "name": "Madeira",
+      "hex": "8C6B3E"
+    },
+    {
+      "name": "Metal",
+      "hex": "5C636A"
+    },
+    {
+      "name": "Pacote",
+      "hex": "C24E44"
+    },
+    {
+      "name": "PacoteFaixa",
+      "hex": "F2E6C4"
+    },
+    {
+      "name": "Papelao",
+      "hex": "B58962"
+    },
+    {
+      "name": "PapelaoTampa",
+      "hex": "8D6948"
+    },
+    {
+      "name": "Parede",
+      "hex": "C8C2B4"
+    },
+    {
+      "name": "Placa13Azul",
+      "hex": "2C5E8C"
+    },
+    {
+      "name": "PlacaCorredor",
+      "hex": "1E6A58"
+    },
+    {
+      "name": "PlacaSetor",
+      "hex": "E0B33A"
+    },
+    {
+      "name": "Porta",
+      "hex": "3C4450"
+    },
+    {
+      "name": "Portal",
+      "hex": "2A2F34"
+    },
+    {
+      "name": "Registro",
+      "hex": "2A2E32"
+    },
+    {
+      "name": "Rodape",
+      "hex": "6F6B64"
+    },
+    {
+      "name": "Tampa",
+      "hex": "E6E4DE"
+    },
+    {
+      "name": "Tubo",
+      "hex": "E8F6D4"
+    },
+    {
+      "name": "TuboMorto",
+      "hex": "5E615A"
+    },
+    {
+      "name": "VerdeSaida",
+      "hex": "1F7A45"
+    },
+    {
+      "name": "Vidro",
+      "hex": "8EA0AA"
+    }
+  ],
+  "emissive": [
+    {
+      "name": "Tubo",
+      "strength": 1.0
+    },
+    {
+      "name": "LetraSaida",
+      "strength": 1.6
+    },
+    {
+      "name": "VerdeSaida",
+      "strength": 0.45
+    },
+    {
+      "name": "Placa13Azul",
+      "strength": 0.4
+    }
+  ],
+  "flip": true
+}
