@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a1e001a1a14b0a9c0e000000000005, type: 3}
+  m_Name: AtacarejoKit
+  m_EditorClassIdentifier: 
+  piso: {fileID: 100000, guid: 23b17d6513cbb34027fb0cee0476cda0, type: 3}
+  forro: {fileID: 100000, guid: 36e1e80f2aad4b2f3427ecc27e1b9e31, type: 3}
+  luminaria: {fileID: 100000, guid: 846bb30bf030b99763667a468980d2a7, type: 3}
+  pilar: {fileID: 100000, guid: 1c11793aaec27cfe6080e47ce37db14a, type: 3}
+  parede: {fileID: 100000, guid: f38e48ca68e0e7c9e09b35c4adb43670, type: 3}
+  portaCamara: {fileID: 100000, guid: fa58cbfb5fb46fc77bf3a6f734e6e5e3, type: 3}
+  portaSaida: {fileID: 100000, guid: 0943440a471fee6ad9fc482f80d66e78, type: 3}
+  portal: {fileID: 100000, guid: 2a7f40374e47774189a47977e33f87d4, type: 3}
+  placaSetor: {fileID: 100000, guid: 4661011b536aac624001edd52d9893f9, type: 3}
+  placaCorredor: {fileID: 100000, guid: 78b2ec72b09b936e289cb72373d5b8d4, type: 3}
+  gondola: {fileID: 100000, guid: cdb76f37161f83d028a185713af3919c, type: 3}
+  testeira: {fileID: 100000, guid: b76c019296a937ebd3e110582a954a3b, type: 3}
+  portaPalete: {fileID: 100000, guid: 8b3d8c2118d9aa3ecbe47cce6bfb9807, type: 3}
+  atendimento: {fileID: 100000, guid: 029316ae3a38be13b45900ccd30e6f74, type: 3}
+  ilha: {fileID: 100000, guid: e044fea674ae6e2c2efb2d6fc6d296e0, type: 3}
+  freezer: {fileID: 100000, guid: 1dcf7c2d6d904daebb02283d0c9f49ef, type: 3}
+  bandeja: {fileID: 100000, guid: f861a9bc14fe3cb3f032ab52df330261, type: 3}
+  palete: {fileID: 100000, guid: d46929c2462195c12180745a68b79d47, type: 3}
+  caixa: {fileID: 100000, guid: 66c357bfb8f817ac41726cd21bcb9b86, type: 3}
+  fardo: {fileID: 100000, guid: b8a2f274e6e4ce1947eb6436415b384c, type: 3}
+  cartucho: {fileID: 100000, guid: a59c36d7ae4809c1d5ff8d7159deed55, type: 3}
+  garrafao: {fileID: 100000, guid: 24097d15a237963f2a3ba665f5405ae9, type: 3}
+  pacote: {fileID: 100000, guid: ed6aac90ee7068b2fe5409159cb0cdc8, type: 3}
+  luminariaMorta: {fileID: 974751739274708089, guid: 0a0b7b962a0d6634c85dda30fab23dce, type: 3}
+  placaSaida: {fileID: 3118798798677972066, guid: d8d2228f4ae2ca945a0c58cccb227678, type: 3}
+  seta: {fileID: 3280976053796911231, guid: df931f025935ae74bb7c9b7171749101, type: 3}
+  placa13: {fileID: 2748410827919476440, guid: b662e1a04b705b3419e125da795a05e0, type: 3}
+  evaporador: {fileID: 4338258936241461959, guid: f99aba9f43e8e1b45a6370267ca7d570, type: 3}
