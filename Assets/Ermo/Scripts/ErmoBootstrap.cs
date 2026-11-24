@@ -73,6 +73,7 @@ namespace Ermo
             player.AddComponent<RuralAudio>().Initialize(walker,world,runtimeSettings);
             playerRig.AddComponent<WaterPassage>().Initialize(walker,session,runtimeSettings);
             display = playerRig.AddComponent<PixelDisplay>(); display.Initialize(walker.View, runtimeSettings, lensShader, outputCamera);
+            PhaseHotkeys.CompletePendingBalnearioEntry(playerRig.GetComponent<WaterPassage>());
             startedAt = Time.unscaledTime;
         }
 
@@ -80,12 +81,13 @@ namespace Ermo
         {
             GodotAtmosphere.Apply(runtimeSettings);
             RenderSettings.ambientMode = AmbientMode.Flat;
-            RenderSettings.ambientLight = new Color(.48f,.68f,.92f)*.18f;
+            RenderSettings.ambientLight = new Color(.84f,.63f,.51f)*.22f;
             sky = new Material(skyShader); RenderSettings.skybox = sky;
-            var sunObject = new GameObject("Pale afternoon"); sunObject.transform.SetParent(session.transform, false);
+            var sunObject = new GameObject("Low sunset"); sunObject.transform.SetParent(session.transform, false);
             var sun = sunObject.AddComponent<Light>(); sun.type = LightType.Directional;
-            sun.color = new Color(1,.88f,.62f); sun.intensity = 1.22f; sun.shadows = LightShadows.Soft;
-            sun.transform.rotation = Quaternion.Euler(28,-48,0); RenderSettings.sun = sun;
+            sun.color = new Color(1f,.80f,.58f); sun.intensity = 1.45f; sun.shadows = LightShadows.Soft;
+            sun.transform.rotation = Quaternion.Euler(12,-38,0); RenderSettings.sun = sun;
+            Shader.SetGlobalVector("_ErmoSunDirection", -sun.transform.forward);
         }
 
         private void Update()

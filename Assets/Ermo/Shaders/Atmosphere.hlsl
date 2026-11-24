@@ -7,6 +7,7 @@ float _ErmoViewRange;
 float _ErmoHazeHeight;
 float _ErmoFogStyle;
 float4 _ErmoGodotFog; // density, aerial perspective, light energy, sky affect
+float4 _ErmoSunDirection; // world-space direction toward the sun
 
 float ErmoHash(float2 p) { return frac(sin(dot(p, float2(127.1,311.7))) * 43758.5453); }
 float ErmoNoise(float2 p)
@@ -24,7 +25,7 @@ float3 ErmoAtmosphere(float3 color, float3 world, float3 eye, float time)
     if (_ErmoFogStyle > .5)
     {
         float height = saturate(normalize(world-eye).y);
-        float3 sky = lerp(float3(.16,.65,.88),float3(.035,.43,.78),smoothstep(.02,.72,height));
+        float3 sky = lerp(_ErmoHazeColor.rgb*1.08,float3(.18,.25,.40),smoothstep(.02,.72,height));
         float3 tint = lerp(_ErmoHazeColor.rgb*_ErmoGodotFog.z,sky,_ErmoGodotFog.y);
         float amount = 1-exp(-distanceToEye*_ErmoGodotFog.x);
         // Godot's distance fog, not the former broad moving height/noise layer.

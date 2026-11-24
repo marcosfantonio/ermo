@@ -44,6 +44,8 @@ namespace Ermo
             View = cameraObject.AddComponent<Camera>(); View.fieldOfView = settings.fieldOfView;
             View.nearClipPlane = .07f; View.farClipPlane = settings.chunkSize * settings.viewDistance;
             cameraObject.AddComponent<AudioListener>();
+            var phaseHotkeys = gameObject.AddComponent<PhaseHotkeys>();
+            phaseHotkeys.Initialize(this);
             yaw = 0; pitch = 30;
             wakeStartedAt = Time.unscaledTime;
             ViewOrientation.localPosition = Vector3.up * 1.12f;

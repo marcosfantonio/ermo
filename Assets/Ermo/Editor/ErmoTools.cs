@@ -77,7 +77,7 @@ namespace Ermo.Editor
             Require(!new WorldSampler(settings).Generate(new Vector2Int(6, 5)).props.Exists(p => p.kind == PropKind.OpenHouse), "Minimum distance ignored");
             ValidateLocations();
             ValidateAudio();
-            foreach (string name in new[] { "grass","plaster","roof","wood" })
+            foreach (string name in new[] { "grass","plaster","roof","wood","road" })
             {
                 string path = $"Assets/Ermo/Textures/{name}.png";
                 var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
@@ -125,8 +125,13 @@ namespace Ermo.Editor
                 Require(matches > settings.terrainResolution,"No terrain boundary checked");
                 Physics.SyncTransforms();
                 float wx = left.transform.position.x+17.3f, wz = left.transform.position.z+29.1f;
-                Require(Physics.Raycast(new Vector3(wx,100,wz),Vector3.down,out var hit,200),"Missing terrain collider");
-                Require(Mathf.Abs(hit.point.y-sampler.MeshHeight(wx,wz)) < .01f,"Road height and triangle collision diverged");
+                RaycastHit[] hits = Physics.RaycastAll(new Vector3(wx,100,wz),Vector3.down,200);
+                RaycastHit groundHit = default; bool foundGround = false;
+                foreach (var candidate in hits)
+                    if (candidate.collider != null && candidate.collider.gameObject.name == "Ground")
+                    { groundHit = candidate; foundGround = true; break; }
+                Require(foundGround,"Missing terrain collider");
+                Require(Mathf.Abs(groundHit.point.y-sampler.MeshHeight(wx,wz)) < .01f,"Road height and triangle collision diverged");
             }
             finally { UnityEngine.Object.DestroyImmediate(parent); palette.Dispose(); }
             UnityEngine.Object.DestroyImmediate(settings);

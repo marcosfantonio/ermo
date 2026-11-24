@@ -14,10 +14,13 @@ namespace Ermo
         private FirstPersonWalker walker;
         private Vector3 entry, diveStart, diveEnd;
         private bool riding, diving;
+        private bool transitionToAtacarejo;
+        private bool transitionStarted;
 
-        public void Initialize(List<Vector3> points, float waterSurface, float poolFloor)
+        public void Initialize(List<Vector3> points, float waterSurface, float poolFloor, bool transitionAtEnd = false)
         {
             path = points.ToArray(); surface = waterSurface; floor = poolFloor;
+            transitionToAtacarejo = transitionAtEnd;
             distances = new float[path.Length];
             for (int i = 1; i < path.Length; i++) distances[i] = distances[i-1]+Vector3.Distance(path[i-1],path[i]);
         }
@@ -39,7 +42,7 @@ namespace Ermo
         {
             if (path == null || riding || player == null || Vector3.Distance(player.transform.position,Launch) > 2.1f || !player.BeginTraversal(true)) return false;
             walker = player; entry = transform.InverseTransformPoint(player.transform.position);
-            distance = diveTime = 0; speed = 2; riding = true; diving = false;
+            distance = diveTime = 0; speed = 2; riding = true; diving = false; transitionStarted = false;
             return true;
         }
         public void Advance(float dt)
@@ -72,8 +75,18 @@ namespace Ermo
             float eye = Mathf.Lerp(.25f,1.65f,Mathf.SmoothStep(0,1,Mathf.InverseLerp(.45f,1,t)));
             Vector3 forward = path[path.Length-1]-path[path.Length-2]; forward.y = 0;
             Pose(p,forward,eye);
-            walker.GetComponent<WaterPassage>()?.SetSlideImmersion(p.y+eye < surface);
-            if (t >= 1) { riding = false; walker.EndTraversal(); }
+            bool submerged = p.y+eye < surface;
+            var passage = walker.GetComponent<WaterPassage>();
+            passage?.SetSlideImmersion(submerged);
+            // Start the phase change on the first face-first water impact, so the
+            // splash/water-on-lens effect leads directly into the blackout.
+            if (submerged && transitionToAtacarejo && !transitionStarted)
+                transitionStarted = PhaseTransition.Go(
+                    new PhaseDestination { scenePath = AtacarejoWorld.ScenePath, useSceneSpawn = true },Color.black);
+            if (t >= 1)
+            {
+                riding = false; passage?.SetSlideImmersion(false); walker.EndTraversal();
+            }
         }
         private void Pose(Vector3 local, Vector3 tangent, float eye)
         {

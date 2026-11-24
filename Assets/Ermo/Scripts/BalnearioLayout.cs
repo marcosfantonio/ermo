@@ -185,7 +185,8 @@ namespace Ermo
         public bool InCirculation(Vector2 p, float radius)
         {
             foreach (var path in paths) for (int i = 1; i < path.Count; i++)
-                if (SegmentDistance(p,path[i-1],path[i]) < radius+2) return true;
+                // Keep the whole footprint (including table/chair/canopy overhang) away from routes.
+                if (SegmentDistance(p,path[i-1],path[i]) < radius+4.5f) return true;
             return false;
         }
         public bool InAttraction(Vector2 p, float radius)

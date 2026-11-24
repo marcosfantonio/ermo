@@ -44,7 +44,10 @@ namespace Ermo
                 OutputCamera = outputObject.AddComponent<Camera>();
             }
             OutputCamera.targetDisplay = 0;
-            OutputCamera.cullingMask = 0;
+            // Keep the output camera renderable for Unity/URP, but do not draw
+            // the world a second time. Layer 31 is reserved for volumes and
+            // has no scene geometry; the overlay Canvas draws the captured image.
+            OutputCamera.cullingMask = 1 << 31;
             OutputCamera.clearFlags = CameraClearFlags.SolidColor;
             OutputCamera.backgroundColor = Color.black;
             OutputCamera.depth = view.depth + 1;

@@ -64,7 +64,12 @@ namespace Ermo
         [InspectorName("Fog Density"), Range(0, .02f)] public float godotFogDensity = .0035f;
         [Range(0, 1)] public float fogAerialPerspective = .3f;
         [Header("Materials / memory optics")]
-        public Texture2D grassTexture, plasterTexture, roofTexture, woodTexture;
+        public Texture2D grassTexture, plasterTexture, roofTexture, woodTexture, roadTexture;
+        [Header("Rural dressing")]
+        [Tooltip("Density of scattered trees and groves per chunk.")]
+        [Range(0, 1)] public float treeDensity = .7f;
+        [Tooltip("Chance that each side of a road stretch receives a wire fence in a chunk.")]
+        [Range(0, 1)] public float fenceDensity = .8f;
         [Range(0, 1)] public float vertexWobble = .035f;
         [Range(0, 1)] public float filmGrain = .014f;
         [Range(0, 1)] public float vignette = .045f;

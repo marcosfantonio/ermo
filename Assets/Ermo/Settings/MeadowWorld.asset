@@ -19,7 +19,7 @@ MonoBehaviour:
   chunksPerFrame: 3
   hillHeight: 19
   hillScale: 180
-  roadWidth: 2.8
+  roadWidth: 4.6
   terrainStyle: 1
   flattenYards: 1
   contourHeightScale: 0.65
@@ -61,18 +61,21 @@ MonoBehaviour:
   walkSwayFrequency: 0.68
   runSwayFrequency: 1
   swaySmoothing: 0.16
-  hazeColor: {r: 0.53, g: 0.72, b: 0.89, a: 1}
+  hazeColor: {r: 0.84, g: 0.62, b: 0.53, a: 1}
   fogStartFraction: 0.85
   fogFullFraction: 0.995
   fogOpticalDepth: 3.8
   fogCloudiness: 0.28
   fogStyle: 1
   godotFogDensity: 0.0035
-  fogAerialPerspective: 0.3
+  fogAerialPerspective: 0.35
   grassTexture: {fileID: 2800000, guid: 1838eb76331b4522b7d5c68fdf0d8232, type: 3}
   plasterTexture: {fileID: 2800000, guid: 1838eb76331b4522b7d5c68fdf0d8233, type: 3}
   roofTexture: {fileID: 2800000, guid: 1838eb76331b4522b7d5c68fdf0d8234, type: 3}
   woodTexture: {fileID: 2800000, guid: 1838eb76331b4522b7d5c68fdf0d8235, type: 3}
+  roadTexture: {fileID: 2800000, guid: ada74114091c4c00842a3efd297c04bc, type: 3}
+  treeDensity: 0.7
+  fenceDensity: 0.8
   vertexWobble: 0.035
   filmGrain: 0.014
   vignette: 0.045

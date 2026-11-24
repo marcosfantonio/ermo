@@ -132,7 +132,8 @@ namespace Ermo.Editor
                     display.ReducedMotion || player.ReducedMotion || !display.EffectsEnabled)
                     throw new InvalidOperationException("Gameplay must keep Dreamcore / 30 fps / digital optics / distance fog permanently active.");
                 if (display == null || display.OutputCamera == null || !display.OutputCamera.isActiveAndEnabled ||
-                    display.OutputCamera.targetTexture != null || display.OutputCamera.targetDisplay != 0)
+                    display.OutputCamera.targetTexture != null || display.OutputCamera.targetDisplay != 0 ||
+                    display.OutputCamera.cullingMask == 0)
                     throw new InvalidOperationException("Display 1 has no active screen camera.");
                 if (player.View.farClipPlane < 700) throw new InvalidOperationException("Draw distance was not increased.");
                 Vector4 haze = Shader.GetGlobalVector("_ErmoHazeParams");

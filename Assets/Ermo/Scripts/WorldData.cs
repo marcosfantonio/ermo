@@ -75,7 +75,7 @@ namespace Ermo
             {
                 string key = BitConverter.ToString(sha.ComputeHash(Encoding.UTF8.GetBytes(settings.seed))).Replace("-", "").ToLowerInvariant();
                 // New population layout: leave every original save untouched.
-                DirectoryPath = Path.Combine(rootDirectory ?? Application.persistentDataPath, "Ermo", "worlds", key, "layout-6-organic-sites");
+                DirectoryPath = Path.Combine(rootDirectory ?? Application.persistentDataPath, "Ermo", "worlds", key, "layout-7-organic-sites");
             }
             try
             {

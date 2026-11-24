@@ -29,8 +29,9 @@ namespace Ermo.Editor
                     WorldGeometry.BuildChunk(record,settings,sampler,palette,root.transform);
                 }
             var sun = new GameObject("Preview Sun").AddComponent<Light>();
-            sun.transform.SetParent(root.transform,false); sun.transform.rotation = Quaternion.Euler(28,-48,0);
-            sun.type = LightType.Directional; sun.color = new Color(1,.88f,.62f); sun.intensity = 1.22f;
+            sun.transform.SetParent(root.transform,false); sun.transform.rotation = Quaternion.Euler(12,-38,0);
+            sun.type = LightType.Directional; sun.color = new Color(1,.80f,.58f); sun.intensity = 1.45f;
+            Shader.SetGlobalVector("_ErmoSunDirection", -sun.transform.forward);
             Object.DestroyImmediate(settings);
             Selection.activeGameObject = root;
             SceneView.RepaintAll();

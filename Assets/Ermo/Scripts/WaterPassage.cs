@@ -25,6 +25,7 @@ namespace Ermo
         private GUIStyle prompt;
         private Vector3 previousHead;
         private bool mantling;
+        private bool jumpingToWaterWorld;
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetPreload() => preload = null;
 
@@ -68,6 +69,46 @@ namespace Ermo
             }
             if (candidate != null && Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
                 AttachLadder(candidate);
+        }
+
+        public void JumpToWaterWorld()
+        {
+            if (State == PassageState.WaterWorld || State == PassageState.Emerging || jumpingToWaterWorld || walker == null) return;
+            StartCoroutine(JumpToWaterWorldRoutine());
+        }
+
+        private System.Collections.IEnumerator JumpToWaterWorldRoutine()
+        {
+            jumpingToWaterWorld = true;
+            float waited = 0f;
+            while (WaterWorld.Instance == null && waited < 15f)
+            {
+                waited += Time.unscaledDeltaTime;
+                yield return null;
+            }
+            if (WaterWorld.Instance == null)
+            {
+                Debug.LogError("Não foi possível carregar o Balneário para a troca de fase.");
+                jumpingToWaterWorld = false;
+                yield break;
+            }
+
+            var destination = WaterWorld.Instance;
+            transform.SetParent(null, true);
+            SceneManager.MoveGameObjectToScene(gameObject, destination.gameObject.scene);
+            if (sourceEnvironment != null) sourceEnvironment.SetActive(false);
+            SceneManager.SetActiveScene(destination.gameObject.scene);
+            destination.ActivateEnvironment();
+            destination.Follow(walker.transform);
+            var rural = walker.GetComponent<RuralAudio>();
+            if (rural != null) { rural.Breeze.Stop(); rural.Footsteps.Stop(); rural.enabled = false; }
+            walker.SetSlidePose(destination.Arrival, 0f, -3f, 1.65f);
+            State = PassageState.WaterWorld;
+            Immersion = 0f;
+            previousWaterPosition = walker.transform.position;
+            waterStepDistance = 0f;
+            Physics.SyncTransforms();
+            jumpingToWaterWorld = false;
         }
 
         private void TickWaterSteps()

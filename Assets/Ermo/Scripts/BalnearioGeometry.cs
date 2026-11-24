@@ -474,7 +474,7 @@ namespace Ermo
             foreach (float x in new[] { -4.65f,4.65f }) foreach (float z in new[] { -4.65f,4.65f })
                 Pole("Tower steel column",tower,new Vector3(x,0,z),new Vector3(x,10,z),.14f,metal,true);
             Box("Slide launch platform",tower,new Vector3(0,9.9f,0),new Vector3(8,.2f,8),metal);
-            // Two stair flights, 20 cm rise / 30 cm tread. Landings meet both flights exactly.
+            // Two realistic switchback flights with solid risers, nosings, paired rails and frequent posts.
             for (int flight = 0; flight < 2; flight++)
             {
                 float x = flight == 0 ? 5.2f : 7.6f;
@@ -482,11 +482,22 @@ namespace Ermo
                 {
                     float z = flight == 0 ? -3.75f+i*.3f : 3.75f-i*.3f;
                     float y = flight*5+(i+1)*.2f;
-                    Box("Tower stair tread",tower,new Vector3(x,y-.1f,z),new Vector3(2.3f,.2f,.32f),metal);
+                    Box("Anti-slip steel stair tread",tower,new Vector3(x,y-.1f,z),new Vector3(2.45f,.12f,.34f),metal);
+                    Box("Stair riser",tower,new Vector3(x,y-.19f,z+(flight == 0 ? -.14f : .14f)),new Vector3(2.35f,.16f,.06f),metal);
+                    Box("Yellow stair nosing",tower,new Vector3(x,y-.025f,z+(flight == 0 ? .13f : -.13f)),new Vector3(2.38f,.025f,.035f),yellow);
                 }
-                Vector3 a = new Vector3(x+(flight == 0 ? -1.1f : 1.1f),flight*5+1,flight == 0 ? -3.9f : 3.9f);
-                Vector3 b = new Vector3(a.x,flight*5+6,-a.z);
-                Pole("Stair handrail",tower,a,b,.045f,metal);
+                float zStart = flight == 0 ? -3.9f : 3.9f, zEnd = -zStart;
+                foreach (float side in new[] { -1.24f,1.24f })
+                {
+                    Vector3 a = new Vector3(x+side,flight*5+.25f,zStart), b = new Vector3(x+side,flight*5+5.25f,zEnd);
+                    Pole("Continuous stair handrail",tower,a+Vector3.up*1.05f,b+Vector3.up*1.05f,.055f,metal);
+                    Pole("Stair lower guard rail",tower,a+Vector3.up*.48f,b+Vector3.up*.48f,.035f,metal);
+                    for (int post = 0; post <= 5; post++)
+                    {
+                        Vector3 foot = Vector3.Lerp(a,b,post/5f);
+                        Pole("Stair baluster",tower,foot,foot+Vector3.up*1.08f,.035f,metal);
+                    }
+                }
             }
             Box("Middle stair landing",tower,new Vector3(6.4f,4.9f,4.15f),new Vector3(4.7f,.2f,1.1f),metal);
             Box("Upper stair landing",tower,new Vector3(3.3f,9.9f,-4.05f),new Vector3(10.8f,.2f,1.2f),metal);
@@ -519,21 +530,8 @@ namespace Ermo
                 }
                 Flume(path,lane == 0 ? orange : blue,lane == 0);
                 lanes.Add(path);
-                root.gameObject.AddComponent<WaterSlideRide>().Initialize(path,runout.Surface,runout.Floor);
+                root.gameObject.AddComponent<WaterSlideRide>().Initialize(path,runout.Surface,runout.Floor,lane == 0);
                 BuildSlideWater(path,runout.Surface);
-                // Supports for a separate overhead service pipe intrude at the sides of
-                // the middle descent, while leaving the rider's centreline unobstructed.
-                int middle = path.Count/2;
-                Vector3 mid = path[middle];
-                Vector3 lateral = Vector3.Cross(Vector3.up,path[middle+1]-path[middle-1]).normalized;
-                float baseY = BalnearioLayout.DeckAt(new Vector2(mid.x,mid.z));
-                foreach (float side in new[] { -1f,1f })
-                {
-                    Vector3 column = mid+lateral*(side*.94f);
-                    Pole("Overhead utility structure / mid-descent column",root,new Vector3(column.x,baseY,column.z),column+Vector3.up*2.1f,.075f,metal,true);
-                }
-                Pole("Utility pipe carrier above slide",root,mid-lateral*1.2f+Vector3.up*2.1f,mid+lateral*1.2f+Vector3.up*2.1f,.09f,metal);
-                Pole("Separate overhead water supply pipe",root,mid-lateral*3+Vector3.up*2.3f,mid+lateral*3+Vector3.up*2.3f,.12f,blue);
             }
             foreach (var path in lanes)
             {
